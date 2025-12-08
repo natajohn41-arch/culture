@@ -13,7 +13,7 @@ WORKDIR /var/www
 # Copier le projet
 COPY . .
 
-# Installer dépendances Laravel
+# Dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader
 
 # Permissions
