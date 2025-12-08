@@ -207,7 +207,7 @@
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
                                             <h6 class="mb-1">
-                                                <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
+                                                <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" 
                                                    class="text-decoration-none">
                                                     {{ Str::limit($contenu->titre, 50) }}
                                                 </a>

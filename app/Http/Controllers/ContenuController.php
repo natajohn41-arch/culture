@@ -25,7 +25,13 @@ class ContenuController extends Controller
             ->take(6)
             ->get();
 
-        $regions = Region::all();
+        // Charger les régions avec le nombre de contenus validés
+        $regions = Region::withCount(['contenus' => function($query) {
+                $query->where('statut', 'valide');
+            }])
+            ->orderBy('nom_region')
+            ->get();
+            
         $langues = Langue::all();
         $totalContenus = Contenu::where('statut', 'valide')->count();
         $totalRegions = Region::count();
@@ -87,6 +93,40 @@ class ContenuController extends Controller
             'commentaires.utilisateur'
         ])->where('statut', 'valide')->findOrFail($id);
 
+        // Vérifier si le contenu est premium et si l'utilisateur a payé
+        $aAcces = true;
+        $doitPayer = false;
+        
+        if ($contenu->est_premium) {
+            // Si l'utilisateur n'est pas connecté, il doit payer
+            if (!auth()->check()) {
+                $aAcces = false;
+                $doitPayer = true;
+            } else {
+                $utilisateur = auth()->user();
+                
+                // Vérifier si l'utilisateur est l'auteur, un admin ou un modérateur (accès gratuit)
+                if ($utilisateur->isAdmin() || 
+                    $utilisateur->isModerator() ||
+                    (isset($contenu->id_auteur) && $utilisateur->id_utilisateur == $contenu->id_auteur)) {
+                    $aAcces = true;
+                } else {
+                    // Vérifier si l'utilisateur a déjà acheté ce contenu
+                    $paiement = \App\Models\Paiement::where('id_utilisateur', $utilisateur->id_utilisateur)
+                        ->where('id_contenu', $contenu->id_contenu)
+                        ->where('statut', 'paye')
+                        ->exists();
+                    
+                    if ($paiement) {
+                        $aAcces = true;
+                    } else {
+                        $aAcces = false;
+                        $doitPayer = true;
+                    }
+                }
+            }
+        }
+
         // Contenus similaires
         $contenusSimilaires = Contenu::with(['region', 'langue', 'medias'])
             ->where('statut', 'valide')
@@ -96,7 +136,7 @@ class ContenuController extends Controller
             ->take(3)
             ->get();
 
-        return view('contenu.public-show', compact('contenu', 'contenusSimilaires'));
+        return view('contenu.public-show', compact('contenu', 'contenusSimilaires', 'aAcces', 'doitPayer'));
     }
 
     /**
@@ -151,6 +191,8 @@ class ContenuController extends Controller
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
             'parent_id' => 'nullable|exists:contenus,id_contenu',
             'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,avi,mov,pdf,doc,docx|max:1024000',
+            'est_premium' => 'nullable|boolean',
+            'prix' => 'nullable|numeric|min:1000|required_if:est_premium,1',
         ]);
 
         // Déterminer le statut selon le rôle
@@ -173,6 +215,8 @@ class ContenuController extends Controller
             'date_creation' => now(),
             'date_validation' => $statut === 'valide' ? now() : null,
             'id_moderateur' => $statut === 'valide' ? Auth::id() : null,
+            'est_premium' => $request->has('est_premium') && $request->est_premium == '1',
+            'prix' => ($request->has('est_premium') && $request->est_premium == '1') ? $data['prix'] ?? null : null,
         ]);
 
         // Gérer les médias

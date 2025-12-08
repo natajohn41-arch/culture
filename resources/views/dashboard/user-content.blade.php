@@ -364,7 +364,7 @@
                 @forelse($derniersContenus as $contenu)
                     <div class="border-bottom pb-3 mb-3">
                         <h6 class="mb-1">
-                            <a href="{{ route('contenus.show', $contenu->id_contenu) }}" class="text-decoration-none">
+                            <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" class="text-decoration-none">
                                 {{ $contenu->titre }}
                             </a>
                         </h6>

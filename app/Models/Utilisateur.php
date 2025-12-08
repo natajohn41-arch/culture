@@ -25,7 +25,8 @@ class Utilisateur extends Authenticatable
         'photo', 
         'id_role', 
         'id_langue',
-        'date_inscription'
+        'date_inscription',
+        'remember_token'
     ];
 
     protected $hidden = [
@@ -68,6 +69,12 @@ class Utilisateur extends Authenticatable
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class, 'id_utilisateur');
+    }
+
+    // Relation avec les paiements
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class, 'id_utilisateur');
     }
 
     // Méthodes utilitaires pour les rôles

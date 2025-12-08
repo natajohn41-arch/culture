@@ -49,7 +49,13 @@
                                         <small class="text-muted">Contenus associés</small>
                                     </div>
                                     <div class="col-6">
-                                        <h4 class="text-success">{{ $typeContenu->created_at->diffForHumans() }}</h4>
+                                        <h4 class="text-success">
+                                            @if($typeContenu->created_at)
+                                                {{ $typeContenu->created_at->diffForHumans() }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </h4>
                                         <small class="text-muted">Créé</small>
                                     </div>
                                 </div>

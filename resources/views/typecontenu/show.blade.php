@@ -29,13 +29,13 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('typecontenu.edit', $typeContenu->id_type_contenu) }}" 
+                        <a href="{{ route('type-contenus.edit', $typeContenu->id_type_contenu) }}" 
                            class="btn btn-outline-warning">
                             <i class="bi bi-pencil me-2"></i>Modifier
                         </a>
                         
                         @if($typeContenu->contenus_count == 0)
-                            <form action="{{ route('typecontenu.destroy', $typeContenu->id_type_contenu) }}" method="POST">
+                            <form action="{{ route('type-contenus.destroy', $typeContenu->id_type_contenu) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
@@ -50,7 +50,7 @@
                             </button>
                         @endif
 
-                        <a href="{{ route('typecontenu.index') }}" class="btn btn-outline-secondary">
+                        <a href="{{ route('type-contenus.index') }}" class="btn btn-outline-secondary">
                             <i class="bi bi-arrow-left me-2"></i>Retour
                         </a>
                     </div>
@@ -76,7 +76,7 @@
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
                                             <h6 class="mb-1">
-                                                <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
+                                                <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" 
                                                    class="text-decoration-none">
                                                     {{ $contenu->titre }}
                                                 </a>
@@ -124,11 +124,23 @@
                         </tr>
                         <tr>
                             <td><strong>Date de création :</strong></td>
-                            <td>{{ $typeContenu->created_at->format('d/m/Y à H:i') }}</td>
+                            <td>
+                                @if($typeContenu->created_at)
+                                    {{ $typeContenu->created_at->format('d/m/Y à H:i') }}
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>Dernière modification :</strong></td>
-                            <td>{{ $typeContenu->updated_at->format('d/m/Y à H:i') }}</td>
+                            <td>
+                                @if($typeContenu->updated_at)
+                                    {{ $typeContenu->updated_at->format('d/m/Y à H:i') }}
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>Contenus associés :</strong></td>

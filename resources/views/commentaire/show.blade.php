@@ -10,7 +10,7 @@
                 <div class="card-header bg-white">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Détail du Commentaire</h5>
-                        <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" class="btn btn-outline-secondary btn-sm">
+                        <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" class="btn btn-outline-secondary btn-sm">
                             <i class="bi bi-arrow-left me-1"></i>Retour au contenu
                         </a>
                     </div>
@@ -23,7 +23,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
                                     <h5 class="mb-2">
-                                        <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" 
+                                        <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" 
                                            class="text-decoration-none">
                                             {{ $commentaire->contenu->titre }}
                                         </a>
@@ -101,7 +101,7 @@
                                 <tr>
                                     <td><strong>Contenu :</strong></td>
                                     <td>
-                                        <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" class="text-decoration-none">
+                                        <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" class="text-decoration-none">
                                             {{ $commentaire->contenu->titre }}
                                         </a>
                                     </td>
@@ -159,7 +159,7 @@
                                     </form>
                                 @endif
 
-                                <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" class="btn btn-outline-primary">
+                                <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" class="btn btn-outline-primary">
                                     <i class="bi bi-file-text me-2"></i>Voir le contenu
                                 </a>
 

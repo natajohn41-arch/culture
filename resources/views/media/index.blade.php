@@ -114,7 +114,7 @@
                                     <div class="mb-2">
                                         <small class="text-muted">
                                             <strong>Contenu :</strong> 
-                                            <a href="{{ route('contenus.show', $media->id_contenu) }}" class="text-decoration-none">
+                                            <a href="{{ route('contenus.show.public', $media->id_contenu) }}" class="text-decoration-none">
                                                 {{ Str::limit($media->contenu->titre, 25) }}
                                             </a>
                                         </small>

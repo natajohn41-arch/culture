@@ -168,6 +168,40 @@
                                                 </small>
                                             </div>
                                         @endif
+
+                                        <!-- Options Premium -->
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       id="est_premium" name="est_premium" value="1"
+                                                       {{ old('est_premium') ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="est_premium">
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    <strong>Contenu Premium</strong>
+                                                </label>
+                                            </div>
+                                            <div class="form-text">
+                                                Cochez cette case pour rendre ce contenu payant.
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3" id="prix-container" style="display: none;">
+                                            <label for="prix" class="form-label">Prix (FCFA) *</label>
+                                            <input type="number" 
+                                                   class="form-control @error('prix') is-invalid @enderror" 
+                                                   id="prix" 
+                                                   name="prix" 
+                                                   value="{{ old('prix') }}" 
+                                                   min="0" 
+                                                   step="0.01"
+                                                   placeholder="Ex: 2500">
+                                            @error('prix')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <div class="form-text">
+                                                Le prix en francs CFA. Minimum : 1000 FCFA.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -197,6 +231,29 @@
 
 @push('scripts')
 <script>
+// Gestion de l'affichage du champ prix selon la case premium
+document.addEventListener('DOMContentLoaded', function() {
+    const premiumCheckbox = document.getElementById('est_premium');
+    const prixContainer = document.getElementById('prix-container');
+    const prixInput = document.getElementById('prix');
+
+    function togglePrixField() {
+        if (premiumCheckbox.checked) {
+            prixContainer.style.display = 'block';
+            prixInput.required = true;
+        } else {
+            prixContainer.style.display = 'none';
+            prixInput.required = false;
+            prixInput.value = '';
+        }
+    }
+
+    premiumCheckbox.addEventListener('change', togglePrixField);
+    
+    // Initialiser l'état au chargement
+    togglePrixField();
+});
+
 // Prévisualisation des médias
 document.getElementById('medias').addEventListener('change', function(e) {
     const files = e.target.files;

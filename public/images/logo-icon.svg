@@ -1,0 +1,20 @@
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <!-- Fond avec les couleurs du drapeau béninois -->
+  <defs>
+    <linearGradient id="gradIcon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#008751;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FCD116;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E8112D;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Cercle avec gradient -->
+  <circle cx="20" cy="20" r="18" fill="url(#gradIcon)"/>
+  
+  <!-- Icône globe/afrique stylisée -->
+  <path d="M 12 12 Q 20 8 28 12 Q 20 16 12 12" fill="white" opacity="0.9"/>
+  <path d="M 12 20 Q 20 24 28 20" stroke="white" stroke-width="2" fill="none" opacity="0.9"/>
+  <path d="M 12 28 Q 20 32 28 28 Q 20 24 12 28" fill="white" opacity="0.9"/>
+</svg>
+
+

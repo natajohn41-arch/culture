@@ -23,12 +23,16 @@ class Contenu extends Model
         'id_langue', 
         'id_moderateur',
         'id_type_contenu', 
-        'id_auteur'
+        'id_auteur',
+        'est_premium',
+        'prix'
     ];
 
     protected $casts = [
         'date_creation' => 'datetime',
         'date_validation' => 'datetime',
+        'est_premium' => 'boolean',
+        'prix' => 'decimal:2',
     ];
 
     // Relation avec la région

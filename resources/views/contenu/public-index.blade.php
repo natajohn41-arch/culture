@@ -110,6 +110,11 @@
                             <span class="badge region-badge">{{ $contenu->region->nom_region }}</span>
                             <span class="badge bg-info">{{ $contenu->langue->nom_langue }}</span>
                             <span class="badge bg-secondary">{{ $contenu->typeContenu->nom_contenu }}</span>
+                            @if($contenu->est_premium)
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-star-fill me-1"></i>PREMIUM
+                                </span>
+                            @endif
                         </div>
                         
                         <h5 class="card-title">{{ Str::limit($contenu->titre, 50) }}</h5>
@@ -121,9 +126,33 @@
                                     <i class="bi bi-calendar me-1"></i>
                                     {{ $contenu->date_creation->format('d/m/Y') }}
                                 </small>
-                                <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" class="btn btn-sm btn-outline-primary">
-                                    Voir plus
-                                </a>
+                                @if($contenu->est_premium)
+                                    @auth
+                                        @php
+                                            $dejaAchete = \App\Models\Paiement::where('id_utilisateur', auth()->user()->id_utilisateur)
+                                                ->where('id_contenu', $contenu->id_contenu)
+                                                ->where('statut', 'paye')
+                                                ->exists();
+                                        @endphp
+                                        @if($dejaAchete || auth()->user()->isAdmin() || auth()->user()->id_utilisateur == $contenu->id_auteur)
+                                            <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" class="btn btn-sm btn-outline-primary">
+                                                Voir plus
+                                            </a>
+                                        @else
+                                            <a href="{{ route('contenus.acheter.show', $contenu->id_contenu) }}" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-lock-fill me-1"></i>Acheter
+                                            </a>
+                                        @endif
+                                    @else
+                                        <a href="{{ route('contenus.acheter.show', $contenu->id_contenu) }}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-lock-fill me-1"></i>Acheter
+                                        </a>
+                                    @endauth
+                                @else
+                                    <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" class="btn btn-sm btn-outline-primary">
+                                        Voir plus
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

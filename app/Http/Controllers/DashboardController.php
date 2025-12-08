@@ -39,6 +39,14 @@ class DashboardController extends Controller
     }
 
     /**
+     * Route publique pour le dashboard admin (utilisée par la route /admin-dashboard)
+     */
+    public function admin()
+    {
+        return $this->adminDashboard();
+    }
+
+    /**
      * Dashboard pour l'administrateur (statistiques complètes)
      */
     private function adminDashboard()
@@ -66,7 +74,7 @@ class DashboardController extends Controller
             ->get();
 
         $lastMedias = Media::with('typeMedia','contenu')
-            ->orderByDesc('created_at')
+            ->orderByDesc('id_media')
             ->take(6)
             ->get();
 

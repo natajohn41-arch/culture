@@ -82,7 +82,7 @@
                             @foreach($commentaires as $commentaire)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" 
+                                        <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" 
                                            class="text-decoration-none">
                                             {{ Str::limit($commentaire->contenu->titre, 40) }}
                                         </a>

@@ -56,7 +56,11 @@
                                     </td>
                                     <td>
                                         <small class="text-muted">
-                                            {{ $type->created_at->format('d/m/Y') }}
+                                            @if($type->created_at)
+                                                {{ $type->created_at->format('d/m/Y') }}
+                                            @else
+                                                <span class="text-muted">N/A</span>
+                                            @endif
                                         </small>
                                     </td>
                                     <td>

@@ -92,7 +92,7 @@
                         </div>
                         <div class="card-footer bg-white">
                             <div class="d-flex justify-content-between">
-                                <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
+                                <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" 
                                    class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-eye me-1"></i>Voir en détail
                                 </a>

@@ -55,12 +55,12 @@ class UtilisateurController extends Controller
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:utilisateur,email',
+            'email' => 'required|email|unique:utilisateurs,email',
             'mot_de_passe' => 'required|string|min:8|confirmed',
             'date_naissance' => 'required|date',
             'sexe' => 'required|in:M,F',
-            'id_langue' => 'required|exists:langue,id_langue',
-            'id_role' => 'required|exists:role,id_role',
+            'id_langue' => 'required|exists:langues,id_langue',
+            'id_role' => 'required|exists:role,id',
             'statut' => 'required|in:actif,inactif',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -84,6 +84,7 @@ class UtilisateurController extends Controller
             'statut' => $data['statut'],
             'photo' => $photoPath,
             'date_inscription' => now(),
+            'remember_token' => null,
         ]);
 
         return redirect()->route('utilisateurs.index')
@@ -138,11 +139,11 @@ class UtilisateurController extends Controller
         $data = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:utilisateur,email,' . $utilisateur->id_utilisateur . ',id_utilisateur',
+            'email' => 'required|email|unique:utilisateurs,email,' . $utilisateur->id_utilisateur . ',id_utilisateur',
             'date_naissance' => 'required|date',
             'sexe' => 'required|in:M,F',
-            'id_langue' => 'required|exists:langue,id_langue',
-            'id_role' => 'required|exists:role,id_role',
+            'id_langue' => 'required|exists:langues,id_langue',
+            'id_role' => 'required|exists:role,id',
             'statut' => 'required|in:actif,inactif',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

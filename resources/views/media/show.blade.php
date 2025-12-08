@@ -73,7 +73,7 @@
                         <tr>
                             <td><strong>Contenu associé :</strong></td>
                             <td>
-                                        <a href="{{ route('contenus.show', $media->id_contenu) }}" 
+                                        <a href="{{ route('contenus.show.public', $media->id_contenu) }}" 
                                    class="text-decoration-none">
                                     {{ $media->contenu->titre }}
                                 </a>
@@ -117,7 +117,7 @@
                             <i class="bi bi-pencil me-2"></i>Modifier
                         </a>
 
-                                <a href="{{ route('contenus.show', $media->id_contenu) }}" 
+                                <a href="{{ route('contenus.show.public', $media->id_contenu) }}" 
                                     class="btn btn-outline-info">
                             <i class="bi bi-file-text me-2"></i>Voir le contenu
                         </a>

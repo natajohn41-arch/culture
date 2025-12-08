@@ -30,28 +30,34 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Vérifier si l'utilisateur existe et le statut est actif
+        // Vérifier si l'utilisateur existe
         $user = Utilisateur::where('email', $credentials['email'])->first();
 
-        if (!$user || $user->statut !== 'actif') {
+        if (!$user) {
             return back()->withErrors([
                 'email' => 'Compte inexistant ou désactivé.',
             ])->onlyInput('email');
         }
 
-        // Tenter la connexion
-        if (Auth::attempt([
-            'email' => $credentials['email'], 
-            'password' => $credentials['password'],
-            'statut' => 'actif'
-        ], $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+        // Vérifier le statut
+        if ($user->statut !== 'actif') {
+            return back()->withErrors([
+                'email' => 'Compte inexistant ou désactivé.',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Les identifiants sont incorrects.',
-        ])->onlyInput('email');
+        // Vérifier le mot de passe manuellement (car la colonne est 'mot_de_passe' et non 'password')
+        if (!Hash::check($credentials['password'], $user->mot_de_passe)) {
+            return back()->withErrors([
+                'email' => 'Les identifiants sont incorrects.',
+            ])->onlyInput('email');
+        }
+
+        // Connecter l'utilisateur
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+        
+        return redirect()->intended('dashboard');
     }
 
     /**

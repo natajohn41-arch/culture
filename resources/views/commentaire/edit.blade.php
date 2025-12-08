@@ -10,7 +10,7 @@
                 <div class="card-header bg-white">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Modifier le Commentaire</h5>
-                        <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" class="btn btn-outline-secondary btn-sm">
+                        <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" class="btn btn-outline-secondary btn-sm">
                             <i class="bi bi-arrow-left me-1"></i>Retour au contenu
                         </a>
                     </div>
@@ -27,7 +27,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <h6 class="mb-1">
-                                            <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" 
+                                            <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" 
                                                class="text-decoration-none">
                                                 {{ $commentaire->contenu->titre }}
                                             </a>
@@ -95,7 +95,7 @@
                         <div class="row mt-4">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between">
-                                    <a href="{{ route('contenus.show', $commentaire->id_contenu) }}" class="btn btn-outline-secondary">
+                                    <a href="{{ route('contenus.show.public', $commentaire->id_contenu) }}" class="btn btn-outline-secondary">
                                         <i class="bi bi-x-circle me-2"></i>Annuler
                                     </a>
                                     <div class="btn-group">

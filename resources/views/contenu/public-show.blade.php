@@ -60,11 +60,17 @@
                 
                 <div class="card-body p-4">
                     <div class="mb-3">
-                        @foreach($contenu->medias as $media)
-                            <span class="badge region-badge me-2">{{ $contenu->region->nom_region }}</span>
-                            <span class="badge bg-info me-2">{{ $contenu->langue->nom_langue }}</span>
-                            <span class="badge bg-secondary">{{ $contenu->typeContenu->nom_contenu }}</span>
-                        @endforeach
+                        <span class="badge region-badge me-2">{{ $contenu->region->nom_region }}</span>
+                        <span class="badge bg-info me-2">{{ $contenu->langue->nom_langue }}</span>
+                        <span class="badge bg-secondary me-2">{{ $contenu->typeContenu->nom_contenu }}</span>
+                        @if($contenu->est_premium)
+                            <span class="badge bg-warning text-dark me-2">
+                                <i class="bi bi-star-fill me-1"></i>PREMIUM
+                            </span>
+                            <span class="badge bg-primary">
+                                <i class="bi bi-currency-exchange me-1"></i>{{ number_format($contenu->prix, 0, ',', ' ') }} FCFA
+                            </span>
+                        @endif
                     </div>
 
                     <h1 class="card-title display-6 fw-bold mb-3">{{ $contenu->titre }}</h1>
@@ -80,9 +86,53 @@
                         </small>
                     </div>
 
-                    <div class="content-text">
-                        {!! $contenu->texte !!}
-                    </div>
+                    @if($contenu->est_premium && !$aAcces)
+                        <!-- Message pour contenu premium non payé -->
+                        <div class="alert alert-warning border-warning mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi bi-lock-fill text-warning me-2" style="font-size: 2rem;"></i>
+                                <div>
+                                    <h5 class="mb-1">Contenu Premium</h5>
+                                    <p class="mb-0">Ce contenu est réservé aux membres qui ont effectué l'achat.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 bg-light rounded mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong class="text-primary">{{ number_format($contenu->prix, 0, ',', ' ') }} FCFA</strong>
+                                        <small class="text-muted d-block">Accès à vie</small>
+                                    </div>
+                                    @auth
+                                        <a href="{{ route('contenus.acheter.show', $contenu->id_contenu) }}" 
+                                           class="btn btn-primary btn-lg">
+                                            <i class="bi bi-credit-card me-2"></i>
+                                            Acheter maintenant
+                                        </a>
+                                    @else
+                                        <a href="{{ route('login') }}" 
+                                           class="btn btn-primary btn-lg">
+                                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                                            Se connecter pour acheter
+                                        </a>
+                                    @endauth
+                                </div>
+                            </div>
+                            
+                            <!-- Aperçu limité du contenu -->
+                            <div class="preview-content" style="max-height: 300px; overflow: hidden; position: relative;">
+                                <div class="content-preview">
+                                    {!! Str::limit(strip_tags($contenu->texte), 500) !!}...
+                                </div>
+                                <div class="preview-overlay" style="position: absolute; bottom: 0; left: 0; right: 0; height: 100px; background: linear-gradient(to bottom, transparent, white);"></div>
+                            </div>
+                        </div>
+                    @else
+                        <!-- Contenu complet -->
+                        <div class="content-text">
+                            {!! $contenu->texte !!}
+                        </div>
+                    @endif
 
                     <!-- Galerie des médias -->
                     @if($contenu->medias->count() > 1)

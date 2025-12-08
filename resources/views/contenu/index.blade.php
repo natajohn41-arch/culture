@@ -94,7 +94,7 @@
                                 <tr>
                                     <td>{{ $contenu->id_contenu }}</td>
                                     <td>
-                                        <a href="{{ route('contenus.show', $contenu->id_contenu) }}" class="text-decoration-none">
+                                        <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" class="text-decoration-none">
                                             {{ Str::limit($contenu->titre, 40) }}
                                         </a>
                                         @if($contenu->commentaires_count > 0)
@@ -139,7 +139,7 @@
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                                          <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
+                                                          <a href="{{ route('contenus.show.public', $contenu->id_contenu) }}" 
                                                               class="btn btn-outline-primary" title="Voir">
                                                 <i class="bi bi-eye"></i>
                                             </a>
