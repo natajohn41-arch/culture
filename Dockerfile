@@ -13,7 +13,7 @@ WORKDIR /var/www
 # Copier le projet
 COPY . .
 
-# Installer dépendances Laravel
+# Dépendances Laravel
 RUN composer install --no-dev --optimize-autoloader
 
 # Permissions
@@ -22,8 +22,6 @@ RUN chmod -R 775 storage bootstrap/cache
 # Port Render
 EXPOSE 10000
 
-# ✅ TOUT SE FAIT AU DÉMARRAGE (avec ENV Render)
-CMD php artisan key:generate --force && \
-    php artisan migrate --force && \
-    php artisan optimize:clear && \
+# ✅ Lancement simple et stable
+CMD php artisan optimize:clear && \
     php -S 0.0.0.0:10000 -t public
