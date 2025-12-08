@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: culture-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: CACHE_STORE
+        value: file
+      - key: LOG_CHANNEL
+        value: stderr
+    buildCommand: composer install --no-dev --optimize-autoloader
+    startCommand: php artisan key:generate --force && php artisan migrate --force && php artisan optimize:clear && php -S 0.0.0.0:10000 -t public
+

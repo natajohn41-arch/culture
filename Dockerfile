@@ -22,8 +22,8 @@ RUN chmod -R 775 storage bootstrap/cache
 # Port Render
 EXPOSE 10000
 
-# ✅ TOUT SE FAIT AU DÉMARRAGE (avec ENV Render)
-CMD php artisan key:generate --force && \
-    php artisan migrate --force && \
-    php artisan optimize:clear && \
-    php -S 0.0.0.0:10000 -t public
+# ✅ Script de démarrage qui gère le cache correctement
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]

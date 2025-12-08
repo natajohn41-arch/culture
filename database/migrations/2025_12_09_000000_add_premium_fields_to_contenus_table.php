@@ -12,8 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('contenus', function (Blueprint $table) {
-            $table->boolean('est_premium')->default(false)->after('statut');
-            $table->decimal('prix', 10, 2)->nullable()->after('est_premium');
+            // Vérifier si les colonnes n'existent pas avant de les ajouter
+            if (!Schema::hasColumn('contenus', 'est_premium')) {
+                $table->boolean('est_premium')->default(false)->after('statut');
+            }
+            if (!Schema::hasColumn('contenus', 'prix')) {
+                $table->decimal('prix', 10, 2)->nullable()->after('est_premium');
+            }
         });
     }
 
@@ -23,7 +28,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('contenus', function (Blueprint $table) {
-            $table->dropColumn(['est_premium', 'prix']);
+            // Vérifier si les colonnes existent avant de les supprimer
+            if (Schema::hasColumn('contenus', 'prix')) {
+                $table->dropColumn('prix');
+            }
+            if (Schema::hasColumn('contenus', 'est_premium')) {
+                $table->dropColumn('est_premium');
+            }
         });
     }
 };
