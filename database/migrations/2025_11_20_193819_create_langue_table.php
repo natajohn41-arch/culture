@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up()
 {
+    Schema::dropIfExists('langues');
     Schema::create('langues', function (Blueprint $table) {
         $table->id('id_langue');
         $table->string('nom_langue');

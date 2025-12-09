@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('media');
         Schema::create('media', function (Blueprint $table) {
             $table->id('id_media');
             $table->string('id_type_media');
             $table->text('description');
             $table->string('chemin');
             $table->foreignId('id_contenu');
-            $table->string('fichier')->nullable()->change();
+            $table->string('fichier')->nullable();
         });
     }
 

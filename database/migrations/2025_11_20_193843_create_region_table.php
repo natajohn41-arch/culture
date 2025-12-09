@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up()
 {
+    Schema::dropIfExists('regions');
     Schema::create('regions', function (Blueprint $table) {
         $table->id('id_region');
         $table->string('nom_region');

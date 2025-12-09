@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up()
 {
+    Schema::dropIfExists('contenus');
     Schema::create('contenus', function (Blueprint $table) {
         $table->id('id_contenu');
         $table->string('titre');
