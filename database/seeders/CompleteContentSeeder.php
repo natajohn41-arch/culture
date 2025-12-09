@@ -21,25 +21,41 @@ class CompleteContentSeeder extends Seeder
         $regions = Region::all();
         $langues = Langue::all();
         $typesContenus = TypeContenu::all();
-        $auteurs = Utilisateur::whereHas('role', function($q) {
-            $q->where('nom_role', 'Auteur');
-        })->get();
         
-        if ($auteurs->isEmpty()) {
-            // Si pas d'auteur, utiliser le premier utilisateur admin
-            $auteurs = Utilisateur::whereHas('role', function($q) {
-                $q->where('nom_role', 'Admin');
-            })->take(1)->get();
+        // Trouver un auteur - méthode plus robuste avec join
+        $roleAuteur = \App\Models\Role::where('nom_role', 'Auteur')->first();
+        $auteurs = collect();
+        
+        if ($roleAuteur) {
+            $auteurs = Utilisateur::where('id_role', $roleAuteur->id)->get();
         }
         
         if ($auteurs->isEmpty()) {
-            $this->command->error('Aucun auteur trouvé. Créez d\'abord des utilisateurs.');
+            // Si pas d'auteur, utiliser le premier utilisateur admin
+            $roleAdmin = \App\Models\Role::where('nom_role', 'Admin')->first();
+            if ($roleAdmin) {
+                $auteurs = Utilisateur::where('id_role', $roleAdmin->id)->take(1)->get();
+            }
+        }
+        
+        if ($auteurs->isEmpty()) {
+            // Dernière tentative : utiliser n'importe quel utilisateur actif
+            $auteurs = Utilisateur::where('statut', 'actif')->take(1)->get();
+        }
+        
+        if ($auteurs->isEmpty()) {
+            $this->command->error('Aucun utilisateur trouvé. Créez d\'abord des utilisateurs avec UsersPerRoleSeeder.');
             return;
         }
         
         $auteur = $auteurs->first();
         $region = $regions->first() ?? Region::first();
         $langue = $langues->first() ?? Langue::first();
+        
+        if (!$region || !$langue) {
+            $this->command->error('Région ou langue manquante. Vérifiez RegionSeeder et LangueSeeder.');
+            return;
+        }
         
         // Contenus par type
         $contenus = [
@@ -182,38 +198,50 @@ class CompleteContentSeeder extends Seeder
         $created = 0;
         
         foreach ($contenus as $contenuData) {
-            // Trouver le type de contenu
-            $typeContenu = $typesContenus->firstWhere('nom_contenu', $contenuData['type']);
-            
-            if (!$typeContenu) {
-                $this->command->warn("Type de contenu '{$contenuData['type']}' non trouvé, création...");
-                $typeData = ['nom_contenu' => $contenuData['type']];
-                // Ajouter description seulement si la colonne existe
-                if (\Schema::hasColumn('type_contenus', 'description')) {
-                    $typeData['description'] = 'Type de contenu : ' . $contenuData['type'];
+            try {
+                // Trouver le type de contenu
+                $typeContenu = $typesContenus->firstWhere('nom_contenu', $contenuData['type']);
+                
+                if (!$typeContenu) {
+                    $this->command->warn("Type de contenu '{$contenuData['type']}' non trouvé, création...");
+                    $typeData = ['nom_contenu' => $contenuData['type']];
+                    // Ajouter description seulement si la colonne existe
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('type_contenus', 'description')) {
+                        $typeData['description'] = 'Type de contenu : ' . $contenuData['type'];
+                    }
+                    $typeContenu = TypeContenu::create($typeData);
+                    $typesContenus->push($typeContenu); // Ajouter à la collection pour éviter de recréer
                 }
-                $typeContenu = TypeContenu::create($typeData);
-            }
-            
-            // Vérifier si le contenu existe déjà
-            $exists = Contenu::where('titre', $contenuData['titre'])->exists();
-            
-            if (!$exists) {
-                Contenu::create([
-                    'titre' => $contenuData['titre'],
-                    'texte' => $contenuData['texte'],
-                    'id_region' => $region->id_region ?? 1,
-                    'id_langue' => $langue->id_langue ?? 1,
-                    'id_type_contenu' => $typeContenu->id_type_contenu,
-                    'id_auteur' => $auteur->id_utilisateur,
-                    'statut' => 'valide',
-                    'date_creation' => Carbon::now()->subDays(rand(1, 30)),
-                    'date_validation' => Carbon::now()->subDays(rand(1, 30)),
-                    'id_moderateur' => $auteur->id_utilisateur,
-                    'est_premium' => $contenuData['est_premium'],
-                    'prix' => $contenuData['prix']
-                ]);
-                $created++;
+                
+                // Vérifier si le contenu existe déjà
+                $exists = Contenu::where('titre', $contenuData['titre'])->exists();
+                
+                if (!$exists) {
+                    // Déterminer les IDs corrects selon la structure de la table
+                    $regionId = $region->id_region ?? $region->id ?? 1;
+                    $langueId = $langue->id_langue ?? $langue->id ?? 1;
+                    $typeContenuId = $typeContenu->id_type_contenu ?? $typeContenu->id ?? 1;
+                    $auteurId = $auteur->id_utilisateur ?? $auteur->id ?? 1;
+                    
+                    Contenu::create([
+                        'titre' => $contenuData['titre'],
+                        'texte' => $contenuData['texte'],
+                        'id_region' => $regionId,
+                        'id_langue' => $langueId,
+                        'id_type_contenu' => $typeContenuId,
+                        'id_auteur' => $auteurId,
+                        'statut' => 'valide',
+                        'date_creation' => Carbon::now()->subDays(rand(1, 30)),
+                        'date_validation' => Carbon::now()->subDays(rand(1, 30)),
+                        'id_moderateur' => $auteurId,
+                        'est_premium' => $contenuData['est_premium'],
+                        'prix' => $contenuData['prix']
+                    ]);
+                    $created++;
+                }
+            } catch (\Exception $e) {
+                $this->command->error("Erreur lors de la création du contenu '{$contenuData['titre']}': " . $e->getMessage());
+                continue;
             }
         }
         

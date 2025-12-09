@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+        
+        // Forcer HTTPS en production pour éviter les avertissements de sécurité
+        if (config('app.env') === 'production' || env('FORCE_HTTPS', false)) {
+            URL::forceScheme('https');
+        }
+        
         // Autoriser automatiquement les administrateurs à bypasser les policies/gates
         Gate::before(function ($user, $ability) {
             if (! $user) {

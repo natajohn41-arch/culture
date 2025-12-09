@@ -22,19 +22,29 @@ class CompleteRegionContentSeeder extends Seeder
         $langues = Langue::all();
         $typesContenus = TypeContenu::all();
         
-        // Trouver un auteur
-        $auteurs = Utilisateur::whereHas('role', function($q) {
-            $q->where('nom_role', 'Auteur');
-        })->get();
+        // Trouver un auteur - méthode plus robuste avec join
+        $roleAuteur = \App\Models\Role::where('nom_role', 'Auteur')->first();
+        $auteurs = collect();
         
-        if ($auteurs->isEmpty()) {
-            $auteurs = Utilisateur::whereHas('role', function($q) {
-                $q->where('nom_role', 'Admin');
-            })->take(1)->get();
+        if ($roleAuteur) {
+            $auteurs = Utilisateur::where('id_role', $roleAuteur->id)->get();
         }
         
         if ($auteurs->isEmpty()) {
-            $this->command->error('Aucun auteur trouvé. Créez d\'abord des utilisateurs.');
+            // Si pas d'auteur, utiliser le premier utilisateur admin
+            $roleAdmin = \App\Models\Role::where('nom_role', 'Admin')->first();
+            if ($roleAdmin) {
+                $auteurs = Utilisateur::where('id_role', $roleAdmin->id)->take(1)->get();
+            }
+        }
+        
+        if ($auteurs->isEmpty()) {
+            // Dernière tentative : utiliser n'importe quel utilisateur actif
+            $auteurs = Utilisateur::where('statut', 'actif')->take(1)->get();
+        }
+        
+        if ($auteurs->isEmpty()) {
+            $this->command->error('Aucun utilisateur trouvé. Créez d\'abord des utilisateurs avec UsersPerRoleSeeder.');
             return;
         }
         
@@ -42,7 +52,12 @@ class CompleteRegionContentSeeder extends Seeder
         $langue = $langues->first() ?? Langue::first();
         
         if ($regions->isEmpty() || $typesContenus->isEmpty()) {
-            $this->command->error('Régions ou types de contenus manquants.');
+            $this->command->error('Régions ou types de contenus manquants. Vérifiez RegionSeeder et TypeContenuSeeder.');
+            return;
+        }
+        
+        if (!$langue) {
+            $this->command->error('Langue manquante. Vérifiez LangueSeeder.');
             return;
         }
         
@@ -141,9 +156,13 @@ class CompleteRegionContentSeeder extends Seeder
         foreach ($regions as $region) {
             // Pour chaque type de contenu
             foreach ($typesContenus as $typeContenu) {
+                // Déterminer les IDs corrects
+                $regionId = $region->id_region ?? $region->id ?? 1;
+                $typeContenuId = $typeContenu->id_type_contenu ?? $typeContenu->id ?? 1;
+                
                 // Vérifier si un contenu de ce type existe déjà pour cette région
-                $exists = Contenu::where('id_region', $region->id_region)
-                    ->where('id_type_contenu', $typeContenu->id_type_contenu)
+                $exists = Contenu::where('id_region', $regionId)
+                    ->where('id_type_contenu', $typeContenuId)
                     ->exists();
                 
                 if ($exists) {
@@ -173,18 +192,24 @@ class CompleteRegionContentSeeder extends Seeder
                     continue;
                 }
                 
+                // Déterminer les IDs corrects selon la structure de la table
+                $regionId = $region->id_region ?? $region->id ?? 1;
+                $langueId = $langue->id_langue ?? $langue->id ?? 1;
+                $typeContenuId = $typeContenu->id_type_contenu ?? $typeContenu->id ?? 1;
+                $auteurId = $auteur->id_utilisateur ?? $auteur->id ?? 1;
+                
                 // Créer le contenu
                 Contenu::create([
                     'titre' => $titre,
                     'texte' => $texte,
-                    'id_region' => $region->id_region,
-                    'id_langue' => $langue->id_langue ?? 1,
-                    'id_type_contenu' => $typeContenu->id_type_contenu,
-                    'id_auteur' => $auteur->id_utilisateur,
+                    'id_region' => $regionId,
+                    'id_langue' => $langueId,
+                    'id_type_contenu' => $typeContenuId,
+                    'id_auteur' => $auteurId,
                     'statut' => 'valide',
                     'date_creation' => Carbon::now()->subDays(rand(1, 60)),
                     'date_validation' => Carbon::now()->subDays(rand(1, 60)),
-                    'id_moderateur' => $auteur->id_utilisateur,
+                    'id_moderateur' => $auteurId,
                     'est_premium' => $template['premium'] ?? false,
                     'prix' => $template['prix'] ?? null
                 ]);
@@ -199,7 +224,8 @@ class CompleteRegionContentSeeder extends Seeder
         // Statistiques finales
         $totalParRegion = [];
         foreach ($regions as $region) {
-            $count = Contenu::where('id_region', $region->id_region)->count();
+            $regionId = $region->id_region ?? $region->id ?? 1;
+            $count = Contenu::where('id_region', $regionId)->count();
             $totalParRegion[] = "{$region->nom_region}: {$count} contenus";
         }
         

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Connexion - Culture Bénin</title>
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
@@ -55,7 +56,7 @@
                             @endif
 
                             <!-- Formulaire de connexion -->
-                            <form action="{{ route('login.post') }}" method="POST">
+                            <form action="{{ route('login.post') }}" method="POST" autocomplete="on">
                                 @csrf
 
                                 <div class="mb-3">
@@ -64,9 +65,14 @@
                                         <span class="input-group-text">
                                             <i class="bi bi-envelope"></i>
                                         </span>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                               id="email" name="email" value="{{ old('email') }}" 
-                                               placeholder="votre@email.com" required>
+                                        <input type="email" 
+                                               class="form-control @error('email') is-invalid @enderror" 
+                                               id="email" 
+                                               name="email" 
+                                               value="{{ old('email') }}" 
+                                               placeholder="votre@email.com" 
+                                               autocomplete="email"
+                                               required>
                                     </div>
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -79,9 +85,13 @@
                                         <span class="input-group-text">
                                             <i class="bi bi-lock"></i>
                                         </span>
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                               id="password" name="password" 
-                                               placeholder="Votre mot de passe" required>
+                                        <input type="password" 
+                                               class="form-control @error('password') is-invalid @enderror" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Votre mot de passe" 
+                                               autocomplete="current-password"
+                                               required>
                                     </div>
                                     @error('password')
                                         <div class="invalid-feedback">{{ $message }}</div>
