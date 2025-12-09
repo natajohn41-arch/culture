@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CompleteContentSeeder::class,
             CompleteRegionContentSeeder::class,
+            EnhancedRegionContentSeeder::class, // Génère tous les types de contenus pour toutes les régions
         ]);
 
         // Import des données exportées de la base locale (si disponibles)
