@@ -25,9 +25,14 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
         ]);
 
-        // Create one user per role
+        // Create one user per role (test users)
         $this->call([
             UsersPerRoleSeeder::class,
+        ]);
+
+        // Create production users (if configured)
+        $this->call([
+            ProductionUsersSeeder::class,
         ]);
 
         // Sample contents, medias and commentaires (optional)
