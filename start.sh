@@ -160,6 +160,53 @@ EOF
         else
             echo "✅ All critical tables verified"
         fi
+
+        # Exécuter les seeders si les tables sont vides
+        if [ "$MIGRATION_SUCCESS" = true ]; then
+            echo "🌱 Checking if database needs seeding..."
+            set +e
+            # Vérifier si les tables de référence sont vides
+            php -r "
+            chdir('/var/www');
+            require '/var/www/vendor/autoload.php';
+            \$app = require_once '/var/www/bootstrap/app.php';
+            \$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+            try {
+                \$rolesCount = \Illuminate\Support\Facades\DB::table('roles')->count();
+                \$languesCount = \Illuminate\Support\Facades\DB::table('langues')->count();
+                \$regionsCount = \Illuminate\Support\Facades\DB::table('regions')->count();
+                \$contenusCount = \Illuminate\Support\Facades\DB::table('contenus')->count();
+                
+                if (\$rolesCount == 0 || \$languesCount == 0 || \$regionsCount == 0) {
+                    echo 'EMPTY';
+                    exit(0);
+                } else {
+                    echo 'HAS_DATA';
+                    exit(0);
+                }
+            } catch (Exception \$e) {
+                echo 'ERROR: ' . \$e->getMessage();
+                exit(1);
+            }
+            " > /tmp/seed_check.txt
+            SEED_CHECK_RESULT=$(cat /tmp/seed_check.txt)
+            rm -f /tmp/seed_check.txt
+            set -e
+
+            if [ "$SEED_CHECK_RESULT" = "EMPTY" ]; then
+                echo "📦 Database is empty, running seeders..."
+                php artisan db:seed --force 2>&1
+                if [ $? -eq 0 ]; then
+                    echo "✅ Seeders completed successfully"
+                else
+                    echo "⚠️  Seeders failed, but continuing..."
+                fi
+            elif [ "$SEED_CHECK_RESULT" = "HAS_DATA" ]; then
+                echo "✅ Database already contains data, skipping seeders"
+            else
+                echo "⚠️  Could not check database state, skipping seeders"
+            fi
+        fi
     fi
 else
     echo "❌ CRITICAL: Cannot connect to database. Migrations cannot run."

@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('utilisateurs', function (Blueprint $table) {
-            if (Schema::hasColumn('utilisateurs', 'remember_token')) {
+        if (Schema::hasColumn('utilisateurs', 'remember_token')) {
+            Schema::table('utilisateurs', function (Blueprint $table) {
                 $table->string('remember_token')->nullable()->change();
-            } else {
-                $table->string('remember_token')->nullable()->after('statut');
-            }
-        });
+            });
+        } else {
+            Schema::table('utilisateurs', function (Blueprint $table) {
+                $table->string('remember_token')->nullable();
+            });
+        }
     }
 
     /**

@@ -37,8 +37,10 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-             
-
-       
+        // Complete content seeders
+        $this->call([
+            CompleteContentSeeder::class,
+            CompleteRegionContentSeeder::class,
+        ]);
     }
 }
