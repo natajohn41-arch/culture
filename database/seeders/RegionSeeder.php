@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Region;
 
 class RegionSeeder extends Seeder
 {
@@ -28,11 +29,12 @@ class RegionSeeder extends Seeder
             ['nom_region' => 'Zou', 'description' => 'Département du Zou', 'population' => 900000, 'superficie' => 5600, 'localisation' => 'Bénin - Centre'],
         ];
 
-        // Utiliser upsert pour éviter les doublons sur le champ `nom_region`.
-        \Illuminate\Support\Facades\DB::table('regions')->upsert(
-            $regions,
-            ['nom_region'],
-            ['description', 'population', 'superficie', 'localisation']
-        );
+        // Utiliser firstOrCreate pour éviter les doublons
+        foreach ($regions as $region) {
+            Region::firstOrCreate(
+                ['nom_region' => $region['nom_region']],
+                $region
+            );
+        }
     }
 }

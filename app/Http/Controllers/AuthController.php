@@ -118,8 +118,10 @@ class AuthController extends Controller
 
         // Connecter automatiquement l'utilisateur
         Auth::login($user);
+        $request->session()->regenerate();
 
-        return redirect()->route('dashboard')
+        // Redirection avec pattern POST-REDIRECT-GET pour éviter l'avertissement du navigateur
+        return redirect()->intended('dashboard')
             ->with('success', 'Inscription réussie ! Bienvenue sur Culture Bénin.');
     }
 
