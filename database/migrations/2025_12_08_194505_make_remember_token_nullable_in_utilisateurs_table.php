@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('utilisateurs', function (Blueprint $table) {
-            $table->string('remember_token')->nullable()->change();
+            if (Schema::hasColumn('utilisateurs', 'remember_token')) {
+                $table->string('remember_token')->nullable()->change();
+            } else {
+                $table->string('remember_token')->nullable()->after('statut');
+            }
         });
     }
 
@@ -22,7 +26,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('utilisateurs', function (Blueprint $table) {
-            $table->string('remember_token')->nullable(false)->change();
+            if (Schema::hasColumn('utilisateurs', 'remember_token')) {
+                $table->string('remember_token')->nullable(false)->change();
+            }
         });
     }
 };
