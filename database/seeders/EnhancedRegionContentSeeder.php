@@ -76,11 +76,13 @@ class EnhancedRegionContentSeeder extends Seeder
                 $typeName = $typeContenu->nom_contenu;
                 
                 // Vérifier si un contenu de ce type existe déjà pour cette région
-                $exists = Contenu::where('id_region', $regionId)
+                // On continue quand même pour s'assurer qu'il y a au moins un contenu de chaque type
+                $existingCount = Contenu::where('id_region', $regionId)
                     ->where('id_type_contenu', $typeContenuId)
-                    ->exists();
+                    ->count();
                 
-                if ($exists) {
+                // Si on a déjà au moins un contenu de ce type pour cette région, on skip
+                if ($existingCount > 0) {
                     $skipped++;
                     continue;
                 }
