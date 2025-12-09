@@ -47,5 +47,12 @@ class DatabaseSeeder extends Seeder
             CompleteContentSeeder::class,
             CompleteRegionContentSeeder::class,
         ]);
+
+        // Import des données exportées de la base locale (si disponibles)
+        if (class_exists(\Database\Seeders\Exports\ExportDatabaseSeeder::class)) {
+            $this->call([
+                \Database\Seeders\Exports\ExportDatabaseSeeder::class,
+            ]);
+        }
     }
 }

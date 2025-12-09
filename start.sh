@@ -161,50 +161,64 @@ EOF
             echo "✅ All critical tables verified"
         fi
 
-        # Exécuter les seeders si les tables sont vides
+        # Exécuter les seeders
         if [ "$MIGRATION_SUCCESS" = true ]; then
-            echo "🌱 Checking if database needs seeding..."
-            set +e
-            # Vérifier si les tables de référence sont vides
-            php -r "
-            chdir('/var/www');
-            require '/var/www/vendor/autoload.php';
-            \$app = require_once '/var/www/bootstrap/app.php';
-            \$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-            try {
-                \$rolesCount = \Illuminate\Support\Facades\DB::table('roles')->count();
-                \$languesCount = \Illuminate\Support\Facades\DB::table('langues')->count();
-                \$regionsCount = \Illuminate\Support\Facades\DB::table('regions')->count();
-                \$contenusCount = \Illuminate\Support\Facades\DB::table('contenus')->count();
-                
-                if (\$rolesCount == 0 || \$languesCount == 0 || \$regionsCount == 0) {
-                    echo 'EMPTY';
-                    exit(0);
-                } else {
-                    echo 'HAS_DATA';
-                    exit(0);
-                }
-            } catch (Exception \$e) {
-                echo 'ERROR: ' . \$e->getMessage();
-                exit(1);
-            }
-            " > /tmp/seed_check.txt
-            SEED_CHECK_RESULT=$(cat /tmp/seed_check.txt)
-            rm -f /tmp/seed_check.txt
-            set -e
-
-            if [ "$SEED_CHECK_RESULT" = "EMPTY" ]; then
-                echo "📦 Database is empty, running seeders..."
+            # Vérifier si on doit forcer l'exécution des seeders
+            FORCE_SEED=${FORCE_SEED:-false}
+            
+            if [ "$FORCE_SEED" = "true" ]; then
+                echo "🌱 FORCE_SEED is enabled, running seeders..."
                 php artisan db:seed --force 2>&1
                 if [ $? -eq 0 ]; then
                     echo "✅ Seeders completed successfully"
                 else
                     echo "⚠️  Seeders failed, but continuing..."
                 fi
-            elif [ "$SEED_CHECK_RESULT" = "HAS_DATA" ]; then
-                echo "✅ Database already contains data, skipping seeders"
             else
-                echo "⚠️  Could not check database state, skipping seeders"
+                echo "🌱 Checking if database needs seeding..."
+                set +e
+                # Vérifier si les contenus existent (meilleur indicateur que les données sont présentes)
+                php -r "
+                chdir('/var/www');
+                require '/var/www/vendor/autoload.php';
+                \$app = require_once '/var/www/bootstrap/app.php';
+                \$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+                try {
+                    \$contenusCount = \Illuminate\Support\Facades\DB::table('contenus')->count();
+                    \$utilisateursCount = \Illuminate\Support\Facades\DB::table('utilisateurs')->where('email', 'not like', '%@example.test')->count();
+                    
+                    // Si pas de contenus OU pas d'utilisateurs réels (hors test), on seed
+                    if (\$contenusCount == 0 || \$utilisateursCount == 0) {
+                        echo 'NEEDS_SEED';
+                        exit(0);
+                    } else {
+                        echo 'HAS_DATA';
+                        exit(0);
+                    }
+                } catch (Exception \$e) {
+                    echo 'NEEDS_SEED';
+                    exit(0);
+                }
+                " > /tmp/seed_check.txt
+                SEED_CHECK_RESULT=$(cat /tmp/seed_check.txt)
+                rm -f /tmp/seed_check.txt
+                set -e
+
+                if [ "$SEED_CHECK_RESULT" = "NEEDS_SEED" ]; then
+                    echo "📦 Database needs seeding, running seeders..."
+                    php artisan db:seed --force 2>&1
+                    if [ $? -eq 0 ]; then
+                        echo "✅ Seeders completed successfully"
+                    else
+                        echo "⚠️  Seeders failed, but continuing..."
+                    fi
+                elif [ "$SEED_CHECK_RESULT" = "HAS_DATA" ]; then
+                    echo "✅ Database already contains data, skipping seeders"
+                    echo "💡 To force seeding, set FORCE_SEED=true environment variable"
+                else
+                    echo "⚠️  Could not check database state, running seeders anyway..."
+                    php artisan db:seed --force 2>&1 || echo "⚠️  Seeders failed, but continuing..."
+                fi
             fi
         fi
     fi
