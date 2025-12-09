@@ -15,12 +15,12 @@ $cleaned = 0;
 foreach ($users as $user) {
     if ($user->photo === 'default.png' || empty($user->photo)) {
         echo "Nettoyage de {$user->email}: photo = '{$user->photo}'\n";
-        $user->photo = null;
+        $user->photo = ''; // Chaîne vide au lieu de null si la colonne ne peut pas être NULL
         $user->save();
         $cleaned++;
     } elseif (!Storage::disk('public')->exists($user->photo)) {
         echo "Photo introuvable pour {$user->email}: {$user->photo}\n";
-        $user->photo = null;
+        $user->photo = ''; // Chaîne vide au lieu de null si la colonne ne peut pas être NULL
         $user->save();
         $cleaned++;
     }
