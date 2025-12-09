@@ -135,13 +135,15 @@ class Utilisateur extends Authenticatable
      */
     public function getPhotoUrlAttribute()
     {
-        if (empty($this->photo) || $this->photo === 'default.png') {
+        $photo = trim($this->photo ?? '');
+        
+        if (empty($photo) || $photo === 'default.png') {
             return null;
         }
 
         // Vérifier si le fichier existe
-        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo)) {
-            return asset('storage/' . $this->photo);
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($photo)) {
+            return asset('storage/' . $photo);
         }
 
         return null;
@@ -152,8 +154,12 @@ class Utilisateur extends Authenticatable
      */
     public function hasPhoto()
     {
-        return !empty($this->photo) && 
-               $this->photo !== 'default.png' && 
-               \Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo);
+        $photo = trim($this->photo ?? '');
+        
+        if (empty($photo) || $photo === 'default.png') {
+            return false;
+        }
+        
+        return \Illuminate\Support\Facades\Storage::disk('public')->exists($photo);
     }
 }
