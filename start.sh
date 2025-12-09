@@ -78,14 +78,15 @@ for i in {1..5}; do
     fi
 done
 
-# Exécuter les migrations (avec retry)
+# Exécuter les migrations (avec retry) - OBLIGATOIRE
 if [ "$DB_CONNECTED" = true ]; then
     echo "📦 Running migrations..."
     MIGRATION_SUCCESS=false
-    for i in {1..3}; do
+    for i in {1..5}; do
         # Désactiver temporairement set -e pour permettre les retries
         set +e
-        php artisan migrate --force
+        echo "🔄 Migration attempt $i/5..."
+        php artisan migrate --force 2>&1
         MIGRATION_EXIT_CODE=$?
         set -e
         
@@ -94,25 +95,80 @@ if [ "$DB_CONNECTED" = true ]; then
             MIGRATION_SUCCESS=true
             break
         else
-            if [ $i -eq 3 ]; then
-                echo "❌ Migration failed after 3 attempts (exit code: $MIGRATION_EXIT_CODE)"
+            if [ $i -eq 5 ]; then
+                echo "❌ Migration failed after 5 attempts (exit code: $MIGRATION_EXIT_CODE)"
                 echo "⚠️  Checking migration status..."
                 set +e
                 php artisan migrate:status || true
                 set -e
+                echo ""
+                echo "❌ CRITICAL: Migrations failed! Application cannot start without database tables."
+                echo "❌ Please check the migration errors above and fix them."
+                exit 1
             else
-                echo "⏳ Migration failed, retrying in 3 seconds... (attempt $i/3)"
+                echo "⏳ Migration failed, retrying in 3 seconds... (attempt $i/5)"
                 sleep 3
             fi
         fi
     done
 
-    if [ "$MIGRATION_SUCCESS" = false ]; then
-        echo "⚠️  WARNING: Migrations did not complete successfully!"
-        echo "⚠️  The application will start, but database tables may be missing."
+    # Vérifier que les tables critiques existent
+    if [ "$MIGRATION_SUCCESS" = true ]; then
+        echo "🔍 Verifying critical tables exist..."
+        # Créer un script PHP temporaire pour vérifier les tables
+        cat > /tmp/check_tables.php << 'EOF'
+<?php
+chdir('/var/www');
+require '/var/www/vendor/autoload.php';
+$app = require_once '/var/www/bootstrap/app.php';
+$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
+try {
+    $tables = ['contenus', 'utilisateurs', 'regions', 'langues', 'type_contenus', 'media'];
+    $missing = [];
+    foreach ($tables as $table) {
+        if (!\Illuminate\Support\Facades\Schema::hasTable($table)) {
+            $missing[] = $table;
+        }
+    }
+    if (count($missing) > 0) {
+        echo "Missing tables: " . implode(', ', $missing) . PHP_EOL;
+        exit(1);
+    } else {
+        echo "All critical tables exist." . PHP_EOL;
+        exit(0);
+    }
+} catch (Exception $e) {
+    echo "Error checking tables: " . $e->getMessage() . PHP_EOL;
+    exit(1);
+}
+EOF
+        set +e
+        php /tmp/check_tables.php
+        TABLE_CHECK_EXIT=$?
+        set -e
+        rm -f /tmp/check_tables.php
+        
+        if [ $TABLE_CHECK_EXIT -ne 0 ]; then
+            echo "❌ CRITICAL: Some required tables are missing!"
+            echo "❌ Application cannot start without required database tables."
+            echo "⚠️  Attempting to show migration status..."
+            set +e
+            php artisan migrate:status || true
+            set -e
+            exit 1
+        else
+            echo "✅ All critical tables verified"
+        fi
     fi
 else
-    echo "⚠️  Skipping migrations due to database connection failure"
+    echo "❌ CRITICAL: Cannot connect to database. Migrations cannot run."
+    echo "❌ Please check your database credentials in environment variables:"
+    echo "   - DB_HOST"
+    echo "   - DB_DATABASE"
+    echo "   - DB_USERNAME"
+    echo "   - DB_PASSWORD"
+    exit 1
 fi
 
 # Vider tous les caches (utilise le driver file, pas database)
