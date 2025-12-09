@@ -30,21 +30,45 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Nettoyer l'email (supprimer les espaces)
-        $email = trim($credentials['email']);
+        // Nettoyer et normaliser l'email (supprimer les espaces, mettre en minuscules)
+        $email = strtolower(trim($credentials['email']));
         $password = $credentials['password'];
 
         // Vérifier si l'utilisateur existe
+        // Essayer d'abord avec la comparaison exacte, puis avec case-insensitive si nécessaire
         $user = Utilisateur::where('email', $email)->first();
+        
+        // Si non trouvé, essayer avec une comparaison case-insensitive
+        if (!$user) {
+            $user = Utilisateur::whereRaw('LOWER(TRIM(email)) = ?', [strtolower(trim($email))])->first();
+        }
 
         if (!$user) {
+            // Log pour diagnostic
+            if (config('app.debug')) {
+                \Log::debug('Login failed - User not found', [
+                    'email' => $email,
+                    'email_original' => $credentials['email'],
+                ]);
+            }
+            
             return back()->withErrors([
                 'email' => 'Compte inexistant ou désactivé.',
             ])->onlyInput('email');
         }
 
-        // Vérifier le statut
-        if ($user->statut !== 'actif') {
+        // Vérifier le statut (normaliser pour éviter les problèmes d'espaces)
+        $statut = trim(strtolower($user->statut));
+        if ($statut !== 'actif') {
+            // Log pour diagnostic
+            if (config('app.debug')) {
+                \Log::debug('Login failed - Account not active', [
+                    'email' => $email,
+                    'statut' => $user->statut,
+                    'statut_normalized' => $statut,
+                ]);
+            }
+            
             return back()->withErrors([
                 'email' => 'Compte inexistant ou désactivé.',
             ])->onlyInput('email');
