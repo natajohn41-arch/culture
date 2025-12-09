@@ -81,7 +81,7 @@ class TypeContenuSeeder extends Seeder
         ];
 
         foreach ($typesContenus as $type) {
-            TypeContenu::create($type);
+            TypeContenu::firstOrCreate(['nom_contenu' => $type['nom_contenu']], $type);
         }
 
         $this->command->info('Types de contenus créés avec succès !');

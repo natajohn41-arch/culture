@@ -63,9 +63,36 @@ foreach ($tables as $table => $seederName) {
         $seederContent .= "    public function run(): void\n";
         $seederContent .= "    {\n";
         $seederContent .= "        \$data = " . var_export($dataArray, true) . ";\n\n";
-        $seederContent .= "        foreach (\$data as \$row) {\n";
-        $seederContent .= "            DB::table('{$table}')->insertOrIgnore(\$row);\n";
-        $seederContent .= "        }\n";
+        // Déterminer la clé primaire pour updateOrInsert
+        $primaryKey = null;
+        if (!empty($dataArray)) {
+            $firstRow = $dataArray[0];
+            // Chercher une clé qui ressemble à une clé primaire
+            foreach (array_keys($firstRow) as $key) {
+                if (strpos($key, 'id_') === 0 || $key === 'id') {
+                    $primaryKey = $key;
+                    break;
+                }
+            }
+        }
+        
+        if ($primaryKey) {
+            $seederContent .= "        foreach (\$data as \$row) {\n";
+            $seederContent .= "            DB::table('{$table}')->updateOrInsert(\n";
+            $seederContent .= "                ['{$primaryKey}' => \$row['{$primaryKey}']],\n";
+            $seederContent .= "                \$row\n";
+            $seederContent .= "            );\n";
+            $seederContent .= "        }\n";
+        } else {
+            // Fallback: utiliser une approche plus sûre
+            $seederContent .= "        foreach (\$data as \$row) {\n";
+            $seederContent .= "            // Vérifier si l'enregistrement existe déjà\n";
+            $seederContent .= "            \$exists = DB::table('{$table}')->where(\$row)->exists();\n";
+            $seederContent .= "            if (!\$exists) {\n";
+            $seederContent .= "                DB::table('{$table}')->insert(\$row);\n";
+            $seederContent .= "            }\n";
+            $seederContent .= "        }\n";
+        }
         $seederContent .= "    }\n";
         $seederContent .= "}\n";
 
