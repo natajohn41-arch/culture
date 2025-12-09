@@ -30,8 +30,12 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        // Nettoyer l'email (supprimer les espaces)
+        $email = trim($credentials['email']);
+        $password = $credentials['password'];
+
         // Vérifier si l'utilisateur existe
-        $user = Utilisateur::where('email', $credentials['email'])->first();
+        $user = Utilisateur::where('email', $email)->first();
 
         if (!$user) {
             return back()->withErrors([
@@ -46,10 +50,33 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        // Vérifier le mot de passe manuellement (car la colonne est 'mot_de_passe' et non 'password')
-        if (!Hash::check($credentials['password'], $user->mot_de_passe)) {
+        // Vérifier que le mot de passe hashé existe
+        if (empty($user->mot_de_passe)) {
             return back()->withErrors([
-                'email' => 'Les identifiants sont incorrects.',
+                'email' => 'Erreur de configuration du compte. Veuillez contacter l\'administrateur.',
+            ])->onlyInput('email');
+        }
+
+        // Vérifier le mot de passe avec Hash::check
+        // Note: On ne peut pas utiliser Auth::attempt() directement car Laravel cherche 
+        // un champ 'password' dans la table, mais nous avons 'mot_de_passe'
+        $passwordValid = Hash::check($password, $user->mot_de_passe);
+        
+        if (!$passwordValid) {
+            // En mode debug, logger pour diagnostiquer
+            if (config('app.debug')) {
+                \Log::debug('Login failed', [
+                    'email' => $email,
+                    'user_exists' => true,
+                    'user_status' => $user->statut,
+                    'has_password_hash' => !empty($user->mot_de_passe),
+                    'password_length' => strlen($password),
+                    'hash_prefix' => substr($user->mot_de_passe, 0, 10),
+                ]);
+            }
+            
+            return back()->withErrors([
+                'email' => 'Les identifiants sont incorrects. Vérifiez votre email et mot de passe.',
             ])->onlyInput('email');
         }
 
