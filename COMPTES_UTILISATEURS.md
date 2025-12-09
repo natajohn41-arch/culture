@@ -2,7 +2,7 @@
 
 ## 🔐 Comptes de Test (Seeders)
 
-Ces comptes sont créés automatiquement par `UsersPerRoleSeeder` et utilisent généralement le mot de passe : **`password`**
+Ces comptes sont créés automatiquement par `UsersPerRoleSeeder`. **Tous les mots de passe ont été réinitialisés à : `Enaem123`**
 
 | Email | Nom Complet | Rôle | Statut |
 |-------|-------------|------|--------|
@@ -23,6 +23,7 @@ Ces comptes sont créés automatiquement par `UsersPerRoleSeeder` et utilisent g
 
 ## ⚠️ Important
 
+- **Mot de passe actuel pour tous les utilisateurs : `Enaem123`**
 - Les mots de passe sont hashés dans la base de données et ne peuvent pas être récupérés
 - Si vous ne pouvez pas vous connecter, réinitialisez le mot de passe avec :
 
@@ -31,7 +32,7 @@ Ces comptes sont créés automatiquement par `UsersPerRoleSeeder` et utilisent g
 php artisan users:reset-passwords --email=VOTRE_EMAIL --password=VOTRE_MOT_DE_PASSE
 
 # Réinitialiser tous les utilisateurs
-php artisan users:reset-passwords --password=password --force
+php artisan users:reset-passwords --password=Enaem123 --force
 ```
 
 ## 🔧 Commandes Utiles
