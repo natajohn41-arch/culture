@@ -129,4 +129,31 @@ class Utilisateur extends Authenticatable
     {
         return $this->statut === 'actif';
     }
+
+    /**
+     * Accessor pour l'URL de la photo de profil
+     */
+    public function getPhotoUrlAttribute()
+    {
+        if (empty($this->photo) || $this->photo === 'default.png') {
+            return null;
+        }
+
+        // Vérifier si le fichier existe
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo)) {
+            return asset('storage/' . $this->photo);
+        }
+
+        return null;
+    }
+
+    /**
+     * Vérifie si l'utilisateur a une photo valide
+     */
+    public function hasPhoto()
+    {
+        return !empty($this->photo) && 
+               $this->photo !== 'default.png' && 
+               \Illuminate\Support\Facades\Storage::disk('public')->exists($this->photo);
+    }
 }

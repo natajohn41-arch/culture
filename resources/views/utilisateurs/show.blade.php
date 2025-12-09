@@ -9,10 +9,11 @@
             <!-- Carte profil -->
             <div class="card">
                 <div class="card-body text-center">
-                    @if($utilisateur->photo)
-                        <img src="{{ asset('storage/' . $utilisateur->photo) }}" 
+                    @if($utilisateur->hasPhoto())
+                        <img src="{{ $utilisateur->photo_url }}" 
                              class="rounded-circle mb-3" 
-                             style="width: 150px; height: 150px; object-fit: cover;">
+                             style="width: 150px; height: 150px; object-fit: cover;"
+                             alt="Photo de profil">
                     @else
                         <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3 text-white" 
                              style="width: 150px; height: 150px;">

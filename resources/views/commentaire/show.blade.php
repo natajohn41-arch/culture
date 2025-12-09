@@ -46,8 +46,8 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div class="d-flex align-items-center">
-                                    @if($commentaire->utilisateur->photo)
-                                        <img src="{{ asset('storage/' . $commentaire->utilisateur->photo) }}" 
+                                    @if($commentaire->utilisateur->hasPhoto())
+                                        <img src="{{ $commentaire->utilisateur->photo_url }}" 
                                              class="rounded-circle me-3" 
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     @else

@@ -24,11 +24,12 @@
                             <div class="col-md-4 text-center">
                                 <!-- Photo de profil -->
                                 <div class="mb-4">
-                                    @if(auth()->user()->photo)
-                                        <img src="{{ asset('storage/' . auth()->user()->photo) }}" 
+                                    @if(auth()->user()->hasPhoto())
+                                        <img src="{{ auth()->user()->photo_url }}" 
                                              class="rounded-circle mb-3" 
                                              style="width: 200px; height: 200px; object-fit: cover;"
-                                             id="current-photo">
+                                             id="current-photo"
+                                             alt="Photo de profil">
                                     @else
                                         <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3 text-white" 
                                              style="width: 200px; height: 200px;"

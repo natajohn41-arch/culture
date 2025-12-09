@@ -106,8 +106,8 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($contenu->auteur->photo)
-                                                <img src="{{ asset('storage/' . $contenu->auteur->photo) }}" 
+                                            @if($contenu->auteur->hasPhoto())
+                                                <img src="{{ $contenu->auteur->photo_url }}" 
                                                      class="rounded-circle me-2" 
                                                      style="width: 32px; height: 32px; object-fit: cover;">
                                             @else

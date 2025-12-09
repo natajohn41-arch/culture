@@ -273,8 +273,8 @@
                     <h6 class="mb-0">À propos de l'auteur</h6>
                 </div>
                 <div class="card-body text-center">
-                    @if($contenu->auteur->photo)
-                        <img src="{{ asset('storage/' . $contenu->auteur->photo) }}" 
+                    @if($contenu->auteur->hasPhoto())
+                        <img src="{{ $contenu->auteur->photo_url }}" 
                              class="rounded-circle mb-3" 
                              alt="{{ $contenu->auteur->prenom }}"
                              style="width: 80px; height: 80px; object-fit: cover;">

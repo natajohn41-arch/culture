@@ -89,8 +89,8 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($commentaire->utilisateur->photo)
-                                                <img src="{{ asset('storage/' . $commentaire->utilisateur->photo) }}" 
+                                            @if($commentaire->utilisateur->hasPhoto())
+                                                <img src="{{ $commentaire->utilisateur->photo_url }}" 
                                                      class="rounded-circle me-2" 
                                                      style="width: 32px; height: 32px; object-fit: cover;">
                                             @else

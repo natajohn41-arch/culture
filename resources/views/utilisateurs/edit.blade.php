@@ -23,10 +23,11 @@
                         <!-- Photo actuelle -->
                         <div class="row mb-4">
                             <div class="col-12 text-center">
-                                @if($utilisateur->photo)
-                                    <img src="{{ asset('storage/' . $utilisateur->photo) }}" 
+                                @if($utilisateur->hasPhoto())
+                                    <img src="{{ $utilisateur->photo_url }}" 
                                          class="rounded-circle mb-3" 
-                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                         style="width: 150px; height: 150px; object-fit: cover;"
+                                         alt="Photo de profil">
                                     <div>
                                         <small class="text-muted">Photo actuelle</small>
                                     </div>

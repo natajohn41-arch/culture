@@ -120,8 +120,8 @@
                                     <td>{{ $user->id_utilisateur }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($user->photo)
-                                                <img src="{{ asset('storage/' . $user->photo) }}" 
+                                            @if($user->hasPhoto())
+                                                <img src="{{ $user->photo_url }}" 
                                                      class="rounded-circle me-3" 
                                                      style="width: 40px; height: 40px; object-fit: cover;">
                                             @else

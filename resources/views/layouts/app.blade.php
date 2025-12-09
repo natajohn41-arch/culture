@@ -119,10 +119,11 @@
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                @if(auth()->user()->photo)
-                                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" 
+                                @if(auth()->user()->hasPhoto())
+                                    <img src="{{ auth()->user()->photo_url }}" 
                                          class="rounded-circle me-2" 
-                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                         style="width: 32px; height: 32px; object-fit: cover;"
+                                         alt="Photo de profil">
                                 @else
                                     <i class="bi bi-person-circle me-2"></i>
                                 @endif
