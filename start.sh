@@ -52,13 +52,68 @@ if ! grep -q "APP_KEY=base64:" .env 2>/dev/null; then
     }
 fi
 
-# Exécuter les migrations (avec gestion d'erreur pour éviter les échecs)
-echo "📦 Running migrations..."
-php artisan migrate --force || {
-    echo "⚠️  Migration error, but continuing..."
-    # Vérifier si les tables essentielles existent
-    php artisan migrate:status || true
-}
+# Tester la connexion à la base de données avec retry
+echo "🔌 Testing database connection..."
+DB_CONNECTED=false
+for i in {1..5}; do
+    # Désactiver temporairement set -e pour ce test
+    set +e
+    php artisan migrate:status >/dev/null 2>&1
+    DB_TEST_EXIT=$?
+    set -e
+    
+    if [ $DB_TEST_EXIT -eq 0 ]; then
+        echo "✅ Database connection successful"
+        DB_CONNECTED=true
+        break
+    else
+        if [ $i -eq 5 ]; then
+            echo "⚠️  Database connection failed after 5 attempts"
+            echo "⚠️  Please check your database credentials in environment variables"
+            echo "⚠️  Required: DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD"
+        else
+            echo "⏳ Database not ready, retrying in 2 seconds... (attempt $i/5)"
+            sleep 2
+        fi
+    fi
+done
+
+# Exécuter les migrations (avec retry)
+if [ "$DB_CONNECTED" = true ]; then
+    echo "📦 Running migrations..."
+    MIGRATION_SUCCESS=false
+    for i in {1..3}; do
+        # Désactiver temporairement set -e pour permettre les retries
+        set +e
+        php artisan migrate --force
+        MIGRATION_EXIT_CODE=$?
+        set -e
+        
+        if [ $MIGRATION_EXIT_CODE -eq 0 ]; then
+            echo "✅ Migrations completed successfully"
+            MIGRATION_SUCCESS=true
+            break
+        else
+            if [ $i -eq 3 ]; then
+                echo "❌ Migration failed after 3 attempts (exit code: $MIGRATION_EXIT_CODE)"
+                echo "⚠️  Checking migration status..."
+                set +e
+                php artisan migrate:status || true
+                set -e
+            else
+                echo "⏳ Migration failed, retrying in 3 seconds... (attempt $i/3)"
+                sleep 3
+            fi
+        fi
+    done
+
+    if [ "$MIGRATION_SUCCESS" = false ]; then
+        echo "⚠️  WARNING: Migrations did not complete successfully!"
+        echo "⚠️  The application will start, but database tables may be missing."
+    fi
+else
+    echo "⚠️  Skipping migrations due to database connection failure"
+fi
 
 # Vider tous les caches (utilise le driver file, pas database)
 echo "🧹 Clearing caches..."
