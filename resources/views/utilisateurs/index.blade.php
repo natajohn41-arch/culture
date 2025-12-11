@@ -133,8 +133,10 @@
                                             <div>
                                                 <div class="fw-bold">{{ $user->prenom }} {{ $user->nom }}</div>
                                                 <small class="text-muted">
-                                                    {{ $user->sexe == 'M' ? 'Homme' : 'Femme' }} • 
-                                                    {{ $user->date_naissance->age }} ans
+                                                    {{ $user->sexe == 'M' ? 'Homme' : 'Femme' }}
+                                                    @if($user->date_naissance && $user->age)
+                                                        • {{ $user->age }} ans
+                                                    @endif
                                                 </small>
                                             </div>
                                         </div>

@@ -117,7 +117,13 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Date de naissance :</strong></td>
-                                    <td>{{ $utilisateur->date_naissance->format('d/m/Y') }} ({{ $utilisateur->date_naissance->age }} ans)</td>
+                                    <td>
+                                        @if($utilisateur->date_naissance)
+                                            {{ $utilisateur->date_naissance->format('d/m/Y') }} ({{ $utilisateur->age }} ans)
+                                        @else
+                                            <span class="text-muted">Non renseignée</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Rôle :</strong></td>
