@@ -73,7 +73,7 @@ class CommentaireController extends Controller
         ]);
 
         // Rediriger vers le contenu avec un message de succès
-        return redirect()->route('contenus.show', $data['id_contenu'])
+        return redirect()->route('contenus.show.public', $data['id_contenu'])
             ->with('success', 'Commentaire ajouté avec succès!');
     }
 
@@ -135,7 +135,7 @@ class CommentaireController extends Controller
         ]);
 
         // Rediriger vers le contenu associé
-        return redirect()->route('contenus.show', $commentaire->id_contenu)
+        return redirect()->route('contenus.show.public', $commentaire->id_contenu)
             ->with('success', 'Commentaire modifié avec succès.');
     }
 
@@ -159,7 +159,7 @@ class CommentaireController extends Controller
 
         // Rediriger vers le contenu ou la liste selon le contexte
         if (request()->has('from_content')) {
-            return redirect()->route('contenus.show', $id_contenu)
+            return redirect()->route('contenus.show.public', $id_contenu)
                 ->with('success', 'Commentaire supprimé avec succès.');
         }
 
