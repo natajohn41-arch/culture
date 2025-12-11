@@ -32,7 +32,8 @@ class Media extends Model
     // Relation avec le type de média
     public function typeMedia()
     {
-        return $this->belongsTo(TypeMedia::class, 'id_type_media');
+        // Utiliser une clé personnalisée car id_type_media est string dans media mais integer dans type_medias
+        return $this->belongsTo(TypeMedia::class, 'id_type_media', 'id_type_media');
     }
 
     // Scopes

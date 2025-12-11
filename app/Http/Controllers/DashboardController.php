@@ -106,8 +106,9 @@ class DashboardController extends Controller
             ->groupBy('langues.nom_langue')
             ->pluck('total','nom_langue');
 
-        // Médias par type
-        $mediasParType = Media::join('type_medias', 'media.id_type_media', '=', 'type_medias.id_type_media')
+        // Médias par type (avec cast pour PostgreSQL - id_type_media est string dans media mais integer dans type_medias)
+        $mediasParType = DB::table('media')
+            ->join('type_medias', DB::raw('CAST(media.id_type_media AS INTEGER)'), '=', 'type_medias.id_type_media')
             ->select('type_medias.nom_media', DB::raw('count(*) as total'))
             ->groupBy('type_medias.nom_media')
             ->pluck('total','nom_media');
