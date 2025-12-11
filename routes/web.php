@@ -124,6 +124,15 @@ Route::get('/search', [ContenuController::class, 'search'])->name('search');
 | Route publique pour afficher un contenu (doit être après les routes protégées)
 |--------------------------------------------------------------------------
 */
+// Routes explicites pour bloquer les mots-clés avant la route générique
+Route::get('/contenus/create', function() {
+    abort(404, 'Page non trouvée. Les auteurs doivent utiliser /mes/contenus/create pour créer un contenu.');
+})->name('contenus.create.block');
+
+Route::get('/contenus/edit', function() {
+    abort(404, 'Page non trouvée.');
+})->name('contenus.edit.block');
+
 // Contrainte : {id} doit être un nombre pour éviter les conflits avec /contenus/create, /contenus/edit, etc.
 Route::get('/contenus/{id}', [ContenuController::class, 'showPublic'])
     ->where('id', '[0-9]+')
