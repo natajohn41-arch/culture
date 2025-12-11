@@ -203,3 +203,7 @@ echo "Contenus créés: {$created}\n";
 echo "Contenus existants (vérifiés): {$skipped}\n";
 echo "Total contenus validés: " . Contenu::where('statut', 'valide')->count() . "\n";
 
+
+
+
+

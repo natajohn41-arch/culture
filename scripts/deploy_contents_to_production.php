@@ -111,3 +111,7 @@ foreach ($totalParRegion as $stat) {
 echo "\n✅ Déploiement terminé avec succès !\n";
 echo "Les contenus sont maintenant disponibles sur le site.\n";
 
+
+
+
+

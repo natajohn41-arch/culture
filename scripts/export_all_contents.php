@@ -186,3 +186,7 @@ echo "📊 Total contenus exportés: " . count($contenusData) . "\n\n";
 echo "Pour importer sur le serveur de production, exécutez :\n";
 echo "  php artisan db:seed --class=Database\\Seeders\\Exports\\AllContentsSeeder\n\n";
 
+
+
+
+

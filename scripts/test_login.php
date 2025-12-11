@@ -88,3 +88,7 @@ echo "   \$user = App\\Models\\Utilisateur::create([...]);\n";
 
 echo "\n✅ Diagnostic terminé.\n";
 
+
+
+
+

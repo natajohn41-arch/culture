@@ -29,3 +29,7 @@ Si vous voulez forcer l'exécution des seeders même si des données existent d�
 Les seeders d'export utilisent `insertOrIgnore()` pour éviter les doublons.
 Si vous voulez remplacer les données existantes, modifiez les seeders pour utiliser `insert()` ou `upsert()`.
 
+
+
+
+

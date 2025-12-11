@@ -37,3 +37,7 @@ foreach ($recent as $c) {
     echo "  - [{$c->statut}] {$c->titre} (ID: {$c->id_contenu})\n";
 }
 
+
+
+
+

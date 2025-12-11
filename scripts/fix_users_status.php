@@ -57,3 +57,7 @@ echo "=== Résumé ===\n";
 echo "Total utilisateurs: " . $users->count() . "\n";
 echo "Utilisateurs corrigés: {$fixed}\n";
 
+
+
+
+
