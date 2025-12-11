@@ -84,6 +84,11 @@ class ContenuController extends Controller
      */
     public function showPublic($id)
     {
+        // Vérifier que l'ID est bien un nombre
+        if (!is_numeric($id)) {
+            abort(404, 'Contenu introuvable.');
+        }
+        
         $contenu = Contenu::with([
             'region', 
             'langue', 

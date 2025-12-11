@@ -124,7 +124,10 @@ Route::get('/search', [ContenuController::class, 'search'])->name('search');
 | Route publique pour afficher un contenu (doit être après les routes protégées)
 |--------------------------------------------------------------------------
 */
-Route::get('/contenus/{id}', [ContenuController::class, 'showPublic'])->name('contenus.show.public');
+// Contrainte : {id} doit être un nombre pour éviter les conflits avec /contenus/create, /contenus/edit, etc.
+Route::get('/contenus/{id}', [ContenuController::class, 'showPublic'])
+    ->where('id', '[0-9]+')
+    ->name('contenus.show.public');
 
 
 
