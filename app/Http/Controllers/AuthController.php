@@ -104,9 +104,17 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
+        // Charger la relation role avant de connecter l'utilisateur
+        $user->load('role');
+        
         // Connecter l'utilisateur
         Auth::login($user, $request->boolean('remember'));
+        
+        // Régénérer l'ID de session pour la sécurité
         $request->session()->regenerate();
+        
+        // S'assurer que la session est sauvegardée
+        $request->session()->save();
         
         return redirect()->intended('dashboard');
     }

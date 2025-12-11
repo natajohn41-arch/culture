@@ -80,21 +80,37 @@ class Utilisateur extends Authenticatable
     // Méthodes utilitaires pour les rôles
     public function isAdmin()
     {
+        // Charger la relation si elle n'est pas déjà chargée
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
         return $this->role && $this->role->nom_role === 'Admin';
     }
 
     public function isModerator()
     {
+        // Charger la relation si elle n'est pas déjà chargée
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
         return $this->role && $this->role->nom_role === 'Moderateur';
     }
 
     public function isAuthor()
     {
+        // Charger la relation si elle n'est pas déjà chargée
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
         return $this->role && $this->role->nom_role === 'Auteur';
     }
 
     public function hasRole($role)
     {
+        // Charger la relation si elle n'est pas déjà chargée
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
         return $this->role && $this->role->nom_role === $role;
     }
 
@@ -122,6 +138,23 @@ class Utilisateur extends Authenticatable
     public function getAuthPassword()
     {
         return $this->mot_de_passe;
+    }
+
+    /**
+     * Retourne l'identifiant unique pour l'authentification.
+     * Utilise la clé primaire personnalisée id_utilisateur.
+     */
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Retourne le nom de la colonne utilisée comme identifiant d'authentification.
+     */
+    public function getAuthIdentifierName()
+    {
+        return $this->getKeyName();
     }
 
     // Méthode pour vérifier si l'utilisateur est actif
