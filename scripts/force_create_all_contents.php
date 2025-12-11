@@ -207,3 +207,5 @@ echo "Total contenus validés: " . Contenu::where('statut', 'valide')->count() .
 
 
 
+
+

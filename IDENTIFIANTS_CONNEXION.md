@@ -71,3 +71,5 @@ php scripts/test_user_login_roles.php
 ✅ La relation `role` est maintenant chargée automatiquement lors de l'authentification
 ✅ Les méthodes `isAdmin()`, `isModerator()`, `isAuthor()` chargent automatiquement la relation si nécessaire
 
+
+
