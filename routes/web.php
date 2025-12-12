@@ -14,6 +14,7 @@ use App\Http\Controllers\TypeMediaController;
 use App\Http\Controllers\TypeContenuController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\AdminImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -111,6 +112,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/contenus-a-valider', [ContenuController::class, 'aValider'])->name('contenus.a-valider');
         Route::post('/contenus/{id}/valider', [ContenuController::class, 'valider'])->name('contenus.valider');
         Route::post('/contenus/{id}/rejeter', [ContenuController::class, 'rejeter'])->name('contenus.rejeter');
+        
+        // Import des contenus
+        Route::get('/admin/import-contents', [\App\Http\Controllers\AdminImportController::class, 'showImportPage'])->name('admin.import.show');
+        Route::post('/admin/import-contents', [\App\Http\Controllers\AdminImportController::class, 'importAllContents'])->name('admin.import.contents');
         
         Route::resource('commentaires', CommentaireController::class)->except(['store','destroy']);
         Route::resource('media', MediaController::class)->except(['index']);
