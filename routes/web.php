@@ -102,7 +102,16 @@ Route::middleware(['auth'])->group(function () {
             ->name('utilisateurs.toggle-status');
         Route::resource('regions', RegionController::class);
         Route::resource('langues', LangueController::class);
-        Route::resource('contenus', ContenuController::class)->except(['show']);
+        
+        // Routes pour les contenus (avec route create explicite pour compatibilité)
+        Route::get('/contenus/create', [ContenuController::class, 'create'])->name('contenus.create');
+        Route::resource('contenus', ContenuController::class)->except(['show', 'create']);
+        
+        // Routes de modération (admins peuvent aussi valider/rejeter)
+        Route::get('/contenus-a-valider', [ContenuController::class, 'aValider'])->name('contenus.a-valider');
+        Route::post('/contenus/{id}/valider', [ContenuController::class, 'valider'])->name('contenus.valider');
+        Route::post('/contenus/{id}/rejeter', [ContenuController::class, 'rejeter'])->name('contenus.rejeter');
+        
         Route::resource('commentaires', CommentaireController::class)->except(['store','destroy']);
         Route::resource('media', MediaController::class)->except(['index']);
         Route::resource('roles', RoleController::class);
@@ -124,19 +133,6 @@ Route::get('/search', [ContenuController::class, 'search'])->name('search');
 | Route publique pour afficher un contenu (doit être après les routes protégées)
 |--------------------------------------------------------------------------
 */
-// Routes explicites pour bloquer les mots-clés AVANT la route générique
-// Ces routes doivent être définies en premier pour éviter les conflits
-Route::get('/contenus/create', function() {
-    if (auth()->check()) {
-        return redirect()->route('mes.contenus.create');
-    }
-    return redirect()->route('login')->with('error', 'Vous devez être connecté pour créer un contenu.');
-})->name('contenus.create.block');
-
-Route::get('/contenus/edit', function() {
-    abort(404, 'Page non trouvée.');
-})->name('contenus.edit.block');
-
 // Contrainte stricte : {id} doit être un nombre pour éviter les conflits avec /contenus/create, /contenus/edit, etc.
 Route::get('/contenus/{id}', [ContenuController::class, 'showPublic'])
     ->where('id', '^[0-9]+$')

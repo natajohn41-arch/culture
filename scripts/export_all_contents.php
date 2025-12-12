@@ -192,3 +192,4 @@ echo "  php artisan db:seed --class=Database\\Seeders\\Exports\\AllContentsSeede
 
 
 
+
