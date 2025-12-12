@@ -586,6 +586,13 @@
                         </a>
                     </div>
                 </div>
+                <div class="row g-3 mt-2">
+                    <div class="col-md-12">
+                        <a href="{{ route('admin.import.show') }}" class="btn btn-primary w-100">
+                            <i class="bi bi-upload me-2"></i>📥 Importer les 230 Contenus Locaux
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
