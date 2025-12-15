@@ -3,6 +3,10 @@
 
 @extends('layouts.app')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/animations.css') }}">
+@endpush
+
 @section('title', 'Tableau de Bord Admin')
 
 @section('content')

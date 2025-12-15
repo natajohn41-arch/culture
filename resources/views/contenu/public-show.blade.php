@@ -7,7 +7,7 @@
     <div class="row">
         <!-- Contenu principal -->
         <div class="col-lg-8">
-            <nav aria-label="breadcrumb" class="mb-4">
+            <nav aria-label="breadcrumb" class="mb-4 animate-fade-in-left">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('accueil') }}">Accueil</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('contenus.public') }}">Contenus</a></li>
@@ -15,7 +15,7 @@
                 </ol>
             </nav>
 
-            <article class="card shadow-sm border-0">
+            <article class="card shadow-sm border-0 animate-fade-in-up">
                 @if($contenu->medias->first())
                     @php $firstMedia = $contenu->medias->first(); @endphp
                     @if(str_starts_with($firstMedia->mime_type ?? '', 'image/'))

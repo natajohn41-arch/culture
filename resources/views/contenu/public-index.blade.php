@@ -5,7 +5,7 @@
 @section('content')
 <div class="container py-5">
     <!-- En-tête -->
-    <div class="row mb-5">
+    <div class="row mb-5 animate-fade-in-down">
         <div class="col-12 text-center">
             <h1 class="display-4 fw-bold text-dark mb-3">Contenus Culturels du Bénin</h1>
             <p class="lead text-muted">Découvrez la richesse culturelle et linguistique de nos régions</p>
@@ -13,9 +13,9 @@
     </div>
 
     <!-- Filtres -->
-    <div class="row mb-4">
+    <div class="row mb-4 animate-fade-in-up">
         <div class="col-12">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm hover-lift">
                 <div class="card-body">
                     <form action="{{ route('contenus.public') }}" method="GET" class="row g-3">
                         <div class="col-md-4">
@@ -67,9 +67,9 @@
 
     <!-- Liste des contenus -->
     <div class="row">
-        @forelse($contenus as $contenu)
+        @forelse($contenus as $index => $contenu)
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card culture-card h-100">
+                <div class="card culture-card h-100 hover-lift fade-in-delay-{{ min(($index % 4) + 1, 4) }}">
                     @if($contenu->medias->first())
                         @php $firstMedia = $contenu->medias->first(); @endphp
                         @if(str_starts_with($firstMedia->mime_type ?? '', 'image/'))
