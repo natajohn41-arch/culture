@@ -58,7 +58,7 @@ class MediaController extends Controller
 
         if ($sourceType === 'file') {
             $data = $request->validate([
-                'chemin' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,avi,mov,pdf,doc,docx|max:10240',
+                'chemin' => 'required|file|mimes:jpeg,png,jpg,gif,webp,mp4,avi,mov,wmv,flv,mkv,webm,mp3,wav,ogg,pdf,doc,docx|max:512000',
                 'description' => 'required|string|max:500',
                 'id_contenu' => 'required|exists:contenus,id_contenu',
                 'id_type_media' => 'required|exists:type_medias,id_type_media',
@@ -154,7 +154,7 @@ class MediaController extends Controller
             'description' => 'required|string|max:500',
             'id_contenu' => 'required|exists:contenus,id_contenu',
             'id_type_media' => 'required|exists:type_medias,id_type_media',
-            'chemin' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,avi,mov,pdf,doc,docx|max:10240',
+            'chemin' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,mp4,avi,mov,wmv,flv,mkv,webm,mp3,wav,ogg,pdf,doc,docx|max:512000',
         ]);
 
         // Gérer le nouvel upload si fourni

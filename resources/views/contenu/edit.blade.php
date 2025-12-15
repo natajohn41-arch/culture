@@ -132,7 +132,7 @@
                                            multiple 
                                            accept="image/*,video/*,audio/*,.pdf,.doc,.docx">
                                     <div class="form-text">
-                                        Formats acceptés : images (JPEG, PNG, GIF), vidéos (MP4, AVI, MOV), audio, PDF, Word. Max 100MB par fichier.
+                                        Formats acceptés : images (JPEG, PNG, GIF, WebP), vidéos (MP4, AVI, MOV, WMV, FLV, MKV, WebM), audio (MP3, WAV, OGG), PDF, Word. <strong>Max 500MB par fichier.</strong>
                                     </div>
                                     <!-- Prévisualisation -->
                                     <div id="media-preview" class="mt-3"></div>

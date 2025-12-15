@@ -46,7 +46,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror>
                                     <div class="form-text">
-                                        Formats acceptés : images, vidéos, audio, documents (PDF, Word, TXT). Max 10MB.
+                                        Formats acceptés : images, vidéos (MP4, AVI, MOV, WMV, FLV, MKV, WebM), audio (MP3, WAV, OGG), documents (PDF, Word). <strong>Max 500MB par fichier.</strong>
                                     </div>
                                 </div>
 

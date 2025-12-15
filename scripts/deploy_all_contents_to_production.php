@@ -131,3 +131,5 @@ echo "\n✅ Déploiement terminé avec succès !\n";
 echo "🌐 Les contenus sont maintenant disponibles sur le site.\n";
 echo "\n💡 Pour vérifier, visitez: https://culture-1-19zy.onrender.com/\n";
 
+
+

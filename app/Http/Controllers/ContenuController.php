@@ -198,7 +198,7 @@ class ContenuController extends Controller
             'id_langue' => 'required|exists:langues,id_langue',
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
             'parent_id' => 'nullable|exists:contenus,id_contenu',
-            'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,avi,mov,pdf,doc,docx|max:1024000',
+            'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,mp4,avi,mov,wmv,flv,mkv,webm,mp3,wav,ogg,pdf,doc,docx|max:512000',
             'est_premium' => 'nullable|boolean',
             'prix' => 'nullable|numeric|min:1000|required_if:est_premium,1',
         ]);
@@ -328,7 +328,7 @@ public function update(Request $request, string $id)
         'date_creation' => 'required|date',
         'date_validation' => 'nullable|date',
         'id_moderateur' => 'nullable|exists:utilisateurs,id_utilisateur',
-        'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,bmp,webp,mp4,avi,mov,wmv,flv,mkv,webm,pdf,doc,docx,txt|max:1024000',
+        'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,bmp,webp,mp4,avi,mov,wmv,flv,mkv,webm,mp3,wav,ogg,pdf,doc,docx,txt|max:512000',
         'medias_supprimer' => 'nullable|array',
         // CORRECTION CRITIQUE : 'media' sans 's'
         'medias_supprimer.*' => 'integer|exists:media,id_media',

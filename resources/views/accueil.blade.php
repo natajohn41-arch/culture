@@ -73,6 +73,33 @@
         animation: fadeInUp 1.4s ease-out;
     }
     
+    /* Animations pour les cartes */
+    .content-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Animation pour les statistiques */
+    .stat-number {
+        animation: scaleIn 0.8s ease-out;
+    }
+    
+    /* Animation pour les régions */
+    .region-card {
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .region-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
     .btn-hero {
         padding: 1rem 2.5rem;
         font-size: 1.2rem;
@@ -247,28 +274,28 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-md-3 mb-4">
-                <div class="stat-card">
+                <div class="stat-card animate-scale-in">
                     <i class="bi bi-globe-americas stat-icon"></i>
                     <div class="stat-number">{{ $totalRegions ?? 0 }}</div>
                     <p class="text-muted mb-0">Régions</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
-                <div class="stat-card">
+                <div class="stat-card animate-scale-in fade-in-delay-1">
                     <i class="bi bi-translate stat-icon"></i>
                     <div class="stat-number">{{ $totalLangues ?? 0 }}</div>
                     <p class="text-muted mb-0">Langues</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
-                <div class="stat-card">
+                <div class="stat-card animate-scale-in fade-in-delay-2">
                     <i class="bi bi-file-text stat-icon"></i>
                     <div class="stat-number">{{ $totalContenus ?? 0 }}</div>
                     <p class="text-muted mb-0">Contenus</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
-                <div class="stat-card">
+                <div class="stat-card animate-scale-in fade-in-delay-3">
                     <i class="bi bi-people stat-icon"></i>
                     <div class="stat-number">{{ $totalUtilisateurs ?? 0 }}</div>
                     <p class="text-muted mb-0">Membres</p>
@@ -289,8 +316,8 @@
         </div>
 
         <div id="contenus-scroll" class="d-flex flex-row overflow-x-auto pb-3" style="scroll-behavior: smooth;">
-            @forelse($contenusRecents as $contenu)
-                <div class="card culture-card me-3" style="min-width: 300px; flex-shrink: 0;">
+            @forelse($contenusRecents as $index => $contenu)
+                <div class="card culture-card me-3 content-card hover-lift fade-in-delay-{{ min($index + 1, 4) }}" style="min-width: 300px; flex-shrink: 0;">
                     @if($contenu->medias && $contenu->medias->count() > 0)
                         @php 
                             $firstMedia = $contenu->medias->first();
@@ -421,7 +448,7 @@
 
         <div id="regions-scroll" class="d-flex flex-row overflow-x-auto pb-3" style="scroll-behavior: smooth;">
             @foreach($regions->take(6) as $region)
-                <div class="card border-0 shadow-sm me-3" style="min-width: 300px; flex-shrink: 0; transition: transform 0.3s ease;">
+                <div class="card border-0 shadow-sm me-3 region-card hover-lift fade-in-delay-{{ min($loop->index + 1, 4) }}" style="min-width: 300px; flex-shrink: 0;">
                     <div class="card-body text-center">
                         <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
                         <h5 class="card-title fw-bold">{{ $region->nom_region }}</h5>
