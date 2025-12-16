@@ -108,3 +108,5 @@ echo "\n✅ Diagnostic terminé.\n";
 
 
 
+
+
