@@ -117,7 +117,7 @@
                                             <label for="date_naissance" class="form-label">Date de naissance *</label>
                                             <input type="date" class="form-control @error('date_naissance') is-invalid @enderror" 
                                                    id="date_naissance" name="date_naissance" 
-                                                   value="{{ old('date_naissance', auth()->user()->date_naissance->format('Y-m-d')) }}" required>
+                                                   value="{{ old('date_naissance', auth()->user()->date_naissance ? auth()->user()->date_naissance->format('Y-m-d') : '') }}" required>
                                             @error('date_naissance')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
