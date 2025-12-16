@@ -1,9 +1,0 @@
-create ( )
-
-
-
-edit ()
-
-inde( )
-
-show()

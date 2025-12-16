@@ -9,44 +9,23 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-icon.svg') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-icon.svg') }}">
     
-    <!-- Bootstrap CSS -->
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- Animations CSS -->
-    <link rel="stylesheet" href="{{ asset('css/animations.css') }}">
-    <style>
-        .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://via.placeholder.com/1920x600') center/cover no-repeat;
-            color: white;
-            padding: 100px 0;
-        }
-        .culture-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            animation: fadeInUp 0.6s ease-out;
-        }
-        .culture-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        .region-badge {
-            background: #ff6b35;
-            color: white;
-        }
-        .footer {
-            background: #2c3e50;
-            color: white;
-        }
-    </style>
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-glass sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
-                <i class="bi bi-globe-europe-africa me-2"></i>
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('accueil') }}">
+                <span class="stat-chip">
+                    <i class="bi bi-globe-europe-africa text-primary"></i>
+                    Bénin
+                </span>
                 Culture Bénin
             </a>
             

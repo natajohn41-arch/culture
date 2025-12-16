@@ -129,3 +129,9 @@ echo "   - Compte prêt pour la connexion\n";
 echo "\n✅ Le compte est maintenant configuré correctement !\n";
 echo "🌐 Vous pouvez maintenant vous connecter avec ces identifiants.\n";
 
+
+
+
+
+
+

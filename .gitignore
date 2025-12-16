@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+# Backups et fichiers hors prod
+/resources/views_backup_*/
+/resources/views_auto_fix_backup_*/

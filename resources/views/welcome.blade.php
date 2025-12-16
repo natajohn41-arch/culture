@@ -4,104 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Culture - Système de Gestion de Contenu</title>
-    <!-- Bootstrap 5 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            color: white;
-        }
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .btn-culture {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-        }
-        .btn-culture:hover {
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        .nav-link {
-            color: #333 !important;
-            font-weight: 500;
-        }
-        .nav-link:hover {
-            color: #667eea !important;
-        }
-        /* Horizontal scrolling sections */
-        .scroll-wrapper {
-            position: relative;
-            padding: 1rem 0;
-        }
-        .scroll-container {
-            display: flex;
-            gap: 1rem;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding-bottom: 8px;
-        }
-        .scroll-container::-webkit-scrollbar { height: 8px; }
-        .scroll-container::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
-        .scroll-item {
-            min-width: 260px;
-            max-width: 320px;
-            flex: 0 0 auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-            padding: 1rem;
-        }
-        .scroll-item img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
-        .scroll-controls {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 100%;
-            pointer-events: none;
-        }
-        .scroll-controls .btn {
-            pointer-events: auto;
-            opacity: 0.9;
-        }
-        .scroll-controls .btn-left { position: absolute; left: -10px; }
-        .scroll-controls .btn-right { position: absolute; right: -10px; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-glass sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                <i class="bi bi-globe-europe-africa me-2 text-primary"></i>
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+                <span class="stat-chip">
+                    <i class="bi bi-globe-europe-africa text-primary"></i>
+                    Bénin
+                </span>
                 Culture
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -125,31 +42,41 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">
-                        Gérez votre contenu culturel avec efficacité
+    <section class="hero-modern py-5">
+        <div class="hero-pattern"></div>
+        <div class="container py-5">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-7 animate-fade-up">
+                    <span class="badge-heritage mb-3">
+                        <i class="bi bi-star-fill"></i> Patrimoine & langues du Bénin
+                    </span>
+                    <h1 class="display-5 fw-bold mb-3 text-white">
+                        Gérez et valorisez vos contenus culturels avec élégance
                     </h1>
-                    <p class="lead mb-4">
-                        Une plateforme complète pour gérer vos contenus, médias, régions et utilisateurs. 
-                        Simplifiez votre gestion culturelle avec notre système intuitif.
+                    <p class="lead text-white-50 mb-4">
+                        Une plateforme complète pour publier, organiser et diffuser les richesses culturelles, les langues et les régions du Bénin, avec une expérience fluide et moderne.
                     </p>
-                    <div class="d-flex gap-3">
-                        
-                        <a href="#features" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-info-circle me-2"></i>En savoir plus
+                    <div class="hero-cta">
+                        <a href="{{ route('login') }}" class="btn btn-culture btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Accéder à l’espace
+                        </a>
+                        <a href="#features" class="btn btn-outline-culture btn-lg">
+                            <i class="bi bi-info-circle me-2"></i>Découvrir les modules
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center">
-                    <div class="position-relative">
-                        <div class="feature-icon mx-auto">
-                            <i class="bi bi-journal-text text-white fs-3"></i>
+                <div class="col-lg-5 text-lg-end text-center animate-fade-right">
+                    <div class="card border-0 card-heritage p-4">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="icon-badge"><i class="bi bi-journal-text"></i></span>
+                            <div>
+                                <h5 class="mb-0">Gestion centralisée</h5>
+                                <small class="text-muted">Contenus, médias, régions, rôles</small>
+                            </div>
                         </div>
-                        <h4 class="text-white">Gestion Centralisée</h4>
-                        <p class="text-light">Tous vos contenus au même endroit</p>
+                        <p class="mb-0 text-muted">
+                            Publiez, modérez et mettez en valeur vos articles, histoires, images et langues depuis un tableau de bord clair.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -165,115 +92,124 @@
             </div>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-file-text text-white fs-4"></i>
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-file-text"></i>
                             </div>
                             <h5 class="card-title">Gestion des Contenus</h5>
-                                                        <p class="card-text">
-                                                            <a href="{{ route('contenus.index') }}" class=" nav-link">   Créez, modifiez et organisez vos contenus culturels avec différents types de contenu.  </a>
-                                                        </p>
-                            <ul class="list-unstyled text-start">
-                                <li><i class="bi bi-check text-success me-2"></i>Types de contenu personnalisables</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Édition en temps réel</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Gestion des statuts</li>
-                            </ul>
+                            <p class="text-muted-strong">
+                                Créez, modifiez et organisez vos contenus culturels par type.
+                            </p>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Types de contenu personnalisables</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Édition rapide et statuts</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Publication validée</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('contenus.index') }}" class="btn btn-outline-culture w-100">Voir les contenus</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-image text-white fs-4"></i>
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-image"></i>
                             </div>
                             <h5 class="card-title">Gestion des Médias</h5>
-                            <p class="card-text">
-                             <a href="{{ route('media.index') }}" class=" nav-link">    Uploader et organiser vos images, vidéos et documents avec différents types de médias.  </a>
+                            <p class="text-muted-strong">
+                                Uploadez et organisez images, vidéos et documents par catégories.
                             </p>
-                            <ul class="list-unstyled text-start">
-                                <li><i class="bi bi-check text-success me-2"></i>Support multi-formats</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Catégorisation avancée</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Optimisation automatique</li>
-                            </ul>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Support multi-formats</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Catégorisation avancée</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Optimisation automatique</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('media.index') }}" class="btn btn-outline-culture w-100">Voir les médias</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-globe text-white fs-4"></i>
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-globe"></i>
                             </div>
                             <h5 class="card-title">Gestion Géographique</h5>
-                            <p class="card-text">
-                              <a href="{{ route('regions.index') }}" class=" nav-link">  Organisez vos contenus par régions et localisations géographiques. </a>
+                            <p class="text-muted-strong">
+                                Organisez vos contenus par régions et localisations.
                             </p>
-                            <ul class="list-unstyled text-start">
-                                <li><i class="bi bi-check text-success me-2"></i>Cartographie des régions</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Contenu localisé</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Gestion multi-régions</li>
-                            </ul>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Cartographie des régions</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Contenu localisé</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Gestion multi-régions</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('regions.index') }}" class="btn btn-outline-culture w-100">Voir les régions</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row g-4 mt-2">
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-people text-white fs-4"></i>
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-people"></i>
                             </div>
                             <h5 class="card-title">Gestion des Utilisateurs</h5>
-                            <p class="card-text">
-                             <a href="{{ route('utilisateurs.index') }}" class=" nav-link">     Gérez les accès et permissions avec un système de rôles avancé.
-                                  </a>
-                            </p>
-                          
-                            <ul class="list-unstyled text-start"> 
-                                <li><i class="bi bi-check text-success me-2"></i>Rôles personnalisables</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Gestion des permissions</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Profils utilisateurs</li>
-                            </ul>
+                            <p class="text-muted-strong">Rôles, permissions et profils complets.</p>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Rôles personnalisables</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Permissions fines</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Profils détaillés</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('utilisateurs.index') }}" class="btn btn-outline-culture w-100">Voir les utilisateurs</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-chat-text text-white fs-4"></i>
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-chat-text"></i>
                             </div>
                             <h5 class="card-title">Gestion des Commentaires</h5>
-                            <p class="card-text">
-                             <a href="{{ route('commentaire.index') }}" class=" nav-link">    Modérez et gérez les interactions avec votre audience. </a>
-                            </p>
-                        
-                            <ul class="list-unstyled text-start">
-                                <li><i class="bi bi-check text-success me-2"></i>Modération en temps réel</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Filtres automatiques</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Statistiques d'engagement</li>
-                            </ul>
+                            <p class="text-muted-strong">Modération et suivi de l’engagement.</p>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Modération en temps réel</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Filtres automatiques</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Statistiques d'engagement</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('commentaire.index') }}" class="btn btn-outline-culture w-100">Voir les commentaires</a>
                         </div>
                     </div>
                 </div>
-               <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mx-auto">
-                                <i class="bi bi-translate text-white fs-4"></i>
+                <div class="col-md-4">
+                    <div class="card card-heritage h-100 border-0 p-4 hover-lift animate-fade-up">
+                        <div class="text-center">
+                            <div class="icon-badge mb-3 mx-auto">
+                                <i class="bi bi-translate"></i>
                             </div>
                             <h5 class="card-title">Multi-langues</h5>
-                            <p class="card-text">
-                              <a href="{{ route('langues.index') }}" class=" nav-link">   Support multi-langues pour une audience internationale.  </a> 
-                            </p>
-                            <ul class="list-unstyled text-start">
-                                <li><i class="bi bi-check text-success me-2"></i>Interface traduite</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Contenu multi-langues</li>
-                                <li><i class="bi bi-check text-success me-2"></i>Gestion facile des traductions</li>
-                            </ul>
+                            <p class="text-muted-strong">Interface et contenus traduits.</p>
+                        </div>
+                        <ul class="list-unstyled text-start small mb-0">
+                            <li><i class="bi bi-check text-success me-2"></i>Interface traduite</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Contenus multi-langues</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Gestion simple des traductions</li>
+                        </ul>
+                        <div class="mt-3">
+                            <a href="{{ route('langues.index') }}" class="btn btn-outline-culture w-100">Voir les langues</a>
                         </div>
                     </div> 
                 </div>
@@ -293,7 +229,7 @@
     <section id="regions" class="py-5">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="fw-bold">Régions</h3>
+                <h3 class="fw-bold section-title">Régions</h3>
                 <small class="text-muted">Parcourez les départements</small>
             </div>
             <div class="scroll-wrapper">
@@ -324,7 +260,7 @@
     <section id="contenus" class="py-5 bg-light">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="fw-bold">Contenus publiés</h3>
+                <h3 class="fw-bold section-title">Contenus publiés</h3>
                 <small class="text-muted">Dernières publications</small>
             </div>
             <div class="scroll-wrapper">
@@ -350,18 +286,25 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container text-center">
+    <section class="py-5" style="background: linear-gradient(135deg, #1f3b4d, #f27f3d);">
+        <div class="container text-center text-white">
             <h2 class="fw-bold mb-3">Prêt à commencer ?</h2>
             <p class="lead mb-4">
-                Rejoignez notre plateforme et transformez votre gestion de contenu culturel dès aujourd'hui.
+                Rejoignez notre plateforme et valorisez vos contenus culturels dès aujourd'hui.
             </p>
-           
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ route('register') }}" class="btn btn-light btn-lg text-primary fw-bold">
+                    <i class="bi bi-person-plus me-2"></i>Créer un compte
+                </a>
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
+    <footer class="footer py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
