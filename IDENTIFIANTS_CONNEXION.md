@@ -38,18 +38,21 @@ Ce script met à jour les mots de passe de tous les utilisateurs de test avec le
 
 ## 🚀 Utilisateur de Production
 
-Pour créer un utilisateur admin en production, configurez les variables d'environnement :
+En production, un compte administrateur dédié est déjà configuré :
+
+- **Email:** `admin@culture.bj`
+- **Mot de passe:** `ChangeMe123!`
+
+> ⚠️ Pensez à changer ce mot de passe directement depuis l’interface (profil) après connexion pour plus de sécurité.
+
+Ces identifiants proviennent des variables d'environnement :
 
 ```env
 ADMIN_EMAIL=admin@culture.bj
-ADMIN_PASSWORD=VotreMotDePasseSecurise
+ADMIN_PASSWORD=ChangeMe123!
 ```
 
-Puis exécutez :
-
-```bash
-php artisan db:seed --class=Database\Seeders\ProductionUsersSeeder
-```
+et sont créés via le seeder `ProductionUsersSeeder`, appelé par `DatabaseSeeder` (lui‑même exécuté automatiquement au démarrage en production).
 
 ## ⚠️ Notes Importantes
 
