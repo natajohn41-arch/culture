@@ -20,6 +20,7 @@ services:
       php artisan migrate --force &&
       php artisan db:seed --class=Database\\Seeders\\Exports\\AllContentsSeeder --force ||
       true &&
+      php artisan storage:link &&
       php artisan optimize:clear &&
       php -S 0.0.0.0:10000 -t public
 
