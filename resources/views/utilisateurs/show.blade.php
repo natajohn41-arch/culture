@@ -149,11 +149,23 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Date d'inscription :</strong></td>
-                                    <td>{{ $utilisateur->date_inscription->format('d/m/Y à H:i') }}</td>
+                                    <td>
+                                        @if($utilisateur->date_inscription)
+                                            {{ $utilisateur->date_inscription->format('d/m/Y à H:i') }}
+                                        @else
+                                            <span class="text-muted">Non renseignée</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Dernière modification :</strong></td>
-                                    <td>{{ $utilisateur->updated_at->format('d/m/Y à H:i') }}</td>
+                                    <td>
+                                        @if($utilisateur->updated_at)
+                                            {{ $utilisateur->updated_at->format('d/m/Y à H:i') }}
+                                        @else
+                                            <span class="text-muted">Non renseignée</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Langue préférée :</strong></td>

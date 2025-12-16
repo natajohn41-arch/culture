@@ -94,7 +94,7 @@
                                     <label for="date_naissance" class="form-label">Date de naissance *</label>
                                     <input type="date" class="form-control @error('date_naissance') is-invalid @enderror" 
                                            id="date_naissance" name="date_naissance" 
-                                           value="{{ old('date_naissance', $utilisateur->date_naissance->format('Y-m-d')) }}" required>
+                                           value="{{ old('date_naissance', $utilisateur->date_naissance ? $utilisateur->date_naissance->format('Y-m-d') : '') }}" required>
                                     @error('date_naissance')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -183,7 +183,9 @@
                                             <div class="col-md-6">
                                                 <small class="text-muted">Dernière modification :</small>
                                                 <br>
-                                                <strong>{{ $utilisateur->updated_at->format('d/m/Y à H:i') }}</strong>
+                                                <strong>
+                                                    {{ $utilisateur->updated_at ? $utilisateur->updated_at->format('d/m/Y à H:i') : '—' }}
+                                                </strong>
                                             </div>
                                         </div>
                                     </div>
